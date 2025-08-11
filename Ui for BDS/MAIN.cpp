@@ -67,13 +67,48 @@ int WINAPI WinMain(
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );
     HWND hStop = CreateWindow(
-        L"BUTTON", L"启动",
+        L"BUTTON", L"停止",
         WS_VISIBLE | WS_CHILD,
-        30, 100, 70, 40,
-        hWnd, (HMENU)ID_START,
+        120, 100, 70, 40,
+        hWnd, (HMENU)ID_STOP,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+    HWND hStopForce = CreateWindow(
+        L"BUTTON", L"强行停止",
+        WS_VISIBLE | WS_CHILD,
+        210, 100, 110, 40,
+        hWnd, (HMENU)ID_STOP_FORCE,
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );
 
+    HWND hLabel_2 = CreateWindow(
+        L"STATIC", L"命令输入",
+        WS_VISIBLE | WS_CHILD,
+        30, 155, 90, 30,
+        hWnd, NULL,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+    HWND hCmdKey = CreateWindow(
+        L"EDIT", NULL,
+        WS_VISIBLE | WS_CHILD | WS_BORDER | ES_LEFT | ES_MULTILINE | ES_AUTOHSCROLL,
+        30, 200, 350, 40,
+        hWnd, (HMENU)ID_CMD_KEY,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+    HWND hCmdSend = CreateWindow(
+        L"BUTTON", L"执行",
+        WS_VISIBLE | WS_CHILD,
+        400, 200, 70, 40,
+        hWnd, (HMENU)ID_CMD_OK,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+    HWND hLabel_3 = CreateWindow(
+        L"STATIC", L"快捷命令",
+        WS_VISIBLE | WS_CHILD,
+        30, 255, 90, 30,
+        hWnd, NULL,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
 
     //Font
     HFONT hFont = CreateFont(
@@ -105,7 +140,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT ps;
     HDC hdc;
-    TCHAR greeting[] = _T("by xksyu2021");
+    TCHAR greeting[] = _T("by xksyu2021\nYou must obey Minecraft EULA.");
 
     switch (message)
     {
@@ -124,7 +159,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
         case ID_START:
             StartBDS();
+            break;
+        case ID_STOP:
+            StopBDS();
+            break;
+        case ID_STOP_FORCE:
+            if(MessageBox(hWnd,
+                L"强制关闭服务器是非常危险的操作！\n是否仍要继续？",TITLE, 
+                MB_OKCANCEL | MB_APPLMODAL | MB_ICONWARNING) 
+                == 1 )
+            {
+                ForceStopBDS();
+            }
+            break;
         }
+
     }
     break;
 
@@ -134,6 +183,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
         break;
+    }
+    return 0;
+}
+
+LRESULT CALLBACK WeatherProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
+    case WM_CLOSE:
+        DestroyWindow(hWnd);
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+    default:
+        return DefWindowProc(hWnd, msg, wParam, lParam);
     }
     return 0;
 }

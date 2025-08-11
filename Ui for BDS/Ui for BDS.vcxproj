@@ -135,7 +135,9 @@
     <ClInclude Include="Win32.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="func.cpp" />
+    <ClCompile Include="cmdSend.cpp" />
+    <ClCompile Include="errCheck.cpp" />
+    <ClCompile Include="o&amp;c.cpp" />
     <ClCompile Include="MAIN.cpp" />
   </ItemGroup>
   <ItemGroup>
