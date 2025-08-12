@@ -41,14 +41,8 @@ void StartBDS()
         L"bedrock_server.exe",
         NULL, NULL, NULL, TRUE, NULL, NULL, NULL, &si, &pi))
     {
-        hBDS = NULL;
-        Err(hBDS, TITLE,
-            _T("Failed to find BDS window"));
-        while (bool condition=0)
-        {
 
         }
-    }
     else {
         Err(TITLE, _T("Failed to send command to BDS!"));
         CloseHandle();
