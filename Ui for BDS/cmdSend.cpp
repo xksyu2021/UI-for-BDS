@@ -3,10 +3,12 @@
 #include "Function.h"
 
 //Send
-bool SendCommand(const char* command)
+bool SendCommand(LPWSTR command)
 {
-	DWORD written;
-	if (WriteFile(UIw_key, command, strlen(command), &written, NULL) != 0)
+	if (WriteFile(UIw_key, command, sizeof(command), NULL, NULL) != 0)
 		return true;
-	else return false;
+	else {
+		Err(TITLE, _T("Failed to send command!"));
+		return false;
+	}
 }

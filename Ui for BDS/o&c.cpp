@@ -41,8 +41,8 @@ void StartBDS()
         L"bedrock_server.exe",
         NULL, NULL, NULL, TRUE, NULL, NULL, NULL, &si, &pi))
     {
-
-        }
+        
+    }
     else {
         Err(TITLE, _T("Failed to send command to BDS!"));
         CloseHandle();
@@ -51,8 +51,8 @@ void StartBDS()
 
 void StopBDS()
 {
-    SendCommand((WCHAR)"stop\n");
-    CloseHandle();
+    SendCommand(CWORD("stop"));
+    //CloseHandle();
 }
 
 void ForceStopBDS()
@@ -60,6 +60,6 @@ void ForceStopBDS()
     TerminateProcess(pi.hProcess,0);
     CloseHandle();
     MessageBox(hWnd,
-        L"脪脩鲁垄脢脭脟驴脨脨脥拢脰鹿路镁脦帽脝梅", TITLE,
+        _T("已尝试强行停止服务器"), TITLE,
         MB_OK);
 }

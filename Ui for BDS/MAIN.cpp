@@ -32,7 +32,7 @@ int WINAPI WinMain(
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = szWindowClass;
     wcex.hIconSm = LoadIcon(wcex.hInstance, IDI_APPLICATION);
-    Err(RegisterClassEx(&wcex), szTitle, 
+    Err(RegisterClassEx(&wcex),
         _T("Call to RegisterClassEx failed!"));
    
 
@@ -47,7 +47,7 @@ int WINAPI WinMain(
         530, 560, NULL, NULL,
         hInstance, NULL
     );
-    Err(hWnd, szTitle, 
+    Err(hWnd,
         _T("Call to CreateWindow failed!"));
  
 
@@ -109,6 +109,14 @@ int WINAPI WinMain(
         hWnd, NULL,
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );
+    HWND hFCweather = CreateWindow(
+        L"BUTTON", L"切换天气",
+        WS_VISIBLE | WS_CHILD,
+        30, 300, 110, 40,
+        hWnd, (HMENU)ID_FC_Weather,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+
 
     //Font
     HFONT hFont = CreateFont(
@@ -172,6 +180,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 ForceStopBDS();
             }
             break;
+        case ID_FC_Weather:
+            HINSTANCE HI_FC_weather = NULL;
+            HWND hWeather = NULL;
+            hWeather = CreateChildWindow(hWnd, hWeather,
+                _T("天气控制"),
+                100, 100,
+                WeatherProc, _T("fc_wea"), HI_FC_weather);
         }
 
     }
