@@ -10,7 +10,6 @@ static TCHAR szTitle[] = TITLE;
 HINSTANCE hInst;
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-
 int WINAPI WinMain(
     _In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -35,8 +34,6 @@ int WINAPI WinMain(
     Err(RegisterClassEx(&wcex),
         _T("Call to RegisterClassEx failed!"));
    
-
-
     //Create window
     hInst = hInstance;
     hWnd = CreateWindowEx(
@@ -50,7 +47,6 @@ int WINAPI WinMain(
     Err(hWnd,
         _T("Call to CreateWindow failed!"));
  
-
     //Create controls
     HWND hLabel_1 = CreateWindow(
         L"STATIC", L"基础操作",
@@ -110,10 +106,17 @@ int WINAPI WinMain(
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );
     HWND hFCweather = CreateWindow(
-        L"BUTTON", L"切换天气",
+        L"BUTTON", L"天气控制",
         WS_VISIBLE | WS_CHILD,
         30, 300, 110, 40,
         hWnd, (HMENU)ID_FC_Weather,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+    HWND hFCtime = CreateWindow(
+        L"BUTTON", L"时间控制",
+        WS_VISIBLE | WS_CHILD,
+        160, 300, 110, 40,
+        hWnd, (HMENU)ID_FC_Time,
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );
 
@@ -144,6 +147,11 @@ int WINAPI WinMain(
 }
 
 //Behavior of controls
+InitHWND(hTime); 
+InitHWND(hWeather);
+LRESULT CALLBACK TimeProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam); 
+LRESULT CALLBACK WeatherProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT ps;
@@ -181,12 +189,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
             break;
         case ID_FC_Weather:
-            HINSTANCE HI_FC_weather = NULL;
-            HWND hWeather = NULL;
-            hWeather = CreateChildWindow(hWnd, hWeather,
-                _T("天气控制"),
-                100, 100,
-                WeatherProc, _T("fc_wea"), HI_FC_weather);
+            if(!hWeather)
+            {
+                HINSTANCE HI_FC_weather = NULL;
+                hWeather = CreateChildWindow(hWnd,
+                    _T("天气控制"),
+                    700, 700,
+                    WeatherProc, _T("fc_wea"), HI_FC_weather);
+            }
+            break;
+        case ID_FC_Time:
+            if (!hTime)
+            {
+                HINSTANCE HI_FC_time = NULL;
+                hTime = CreateChildWindow(hWnd,
+                    _T("时间控制"),
+                    700, 700,
+                    TimeProc, _T("fc_time"), HI_FC_time);
+            }
+            break;
         }
 
     }
@@ -202,13 +223,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+
+
 LRESULT CALLBACK WeatherProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
     case WM_CLOSE:
         DestroyWindow(hWnd);
         break;
     case WM_DESTROY:
-        PostQuitMessage(0);
+        hWeather = NULL;
+        break;
+    default:
+        return DefWindowProc(hWnd, msg, wParam, lParam);
+    }
+    return 0;
+}
+
+LRESULT CALLBACK TimeProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
+    case WM_CLOSE:
+        DestroyWindow(hWnd);
+        break;
+    case WM_DESTROY:
+        hTime = NULL;
         break;
     default:
         return DefWindowProc(hWnd, msg, wParam, lParam);

@@ -11,6 +11,4 @@ void ForceStopBDS();
 
 bool SendCommand(LPWSTR command);
 
-HWND CreateChildWindow(HWND hFather, HWND hChild, LPCWCHAR childTitle, int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstance);
-
-LRESULT CALLBACK WeatherProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+HWND CreateChildWindow(HWND hFather, LPCWCHAR childTitle, int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstance);

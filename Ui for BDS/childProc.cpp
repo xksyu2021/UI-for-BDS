@@ -2,8 +2,9 @@
 #include "ID.h"
 #include "Function.h"
 
-HWND CreateChildWindow(HWND hFather, HWND hChild, LPCWCHAR childTitle ,int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstanceF)
+HWND CreateChildWindow(HWND hFather, LPCWCHAR childTitle ,int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstanceF)
 {
+    HWND hChild = NULL;
     static WNDCLASSEX wcexF;
     wcexF.cbSize = sizeof(WNDCLASSEX);
     wcexF.style = CS_HREDRAW | CS_VREDRAW;
@@ -17,18 +18,18 @@ HWND CreateChildWindow(HWND hFather, HWND hChild, LPCWCHAR childTitle ,int x, in
     wcexF.lpszMenuName = NULL;
     wcexF.lpszClassName = className;
     wcexF.hIconSm = LoadIcon(wcexF.hInstance, IDI_APPLICATION);
-    Err(RegisterClassEx(&wcexF),
-        _T("Call to RegisterClassEx failed!"));
+    RegisterClassEx(&wcexF);
+ 
 
     hChild = CreateWindowEx(
-        WS_EX_OVERLAPPEDWINDOW,
+        NULL,
         className, childTitle,
-        WS_CHILD | WS_VISIBLE | WS_BORDER,
-        CW_USEDEFAULT, CW_USEDEFAULT,
-        x, y, NULL, NULL,
+        WS_POPUP | WS_VISIBLE |  WS_CAPTION | WS_SYSMENU,
+        700, 300,
+        x, y, hFather, NULL,
         hInstanceF, NULL
     );
     Err(hChild,
-        _T("CreateChildWindow failed!"));
+        _T("Create ChildWindow failed!"));
     return hChild;
 }

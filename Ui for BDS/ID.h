@@ -1,7 +1,10 @@
 #pragma once
 
 #define InitH(x) HANDLE x = NULL
+#define InitHWND(x) HWND x = NULL
+
 #define CWORD(x) (LPWSTR)_T(x "\n")
+
 extern HANDLE UIw_key, BDSr_key, UIr_log, BDSw_log;
 extern HWND hWnd;
 
