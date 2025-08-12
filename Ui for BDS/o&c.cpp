@@ -41,19 +41,9 @@ void StartBDS()
         L"bedrock_server.exe",
         NULL, NULL, NULL, TRUE, NULL, NULL, NULL, &si, &pi))
     {
-        hBDS = GetConsoleWindow();
+        hBDS = NULL;
         Err(hBDS, TITLE,
             _T("Failed to find BDS window"));
-        /*
-        HMENU hmenu = GetSystemMenu(hBDS, false);
-        RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
-        LONG style = GetWindowLong(hBDS, GWL_STYLE);
-        style &= ~(WS_MINIMIZEBOX);
-        SetWindowLong(hBDS, GWL_STYLE, style);
-        SetWindowPos(hBDS, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-        ShowWindow(hBDS, SW_SHOWNORMAL);
-        DestroyMenu(hmenu);
-        */
         while (bool condition=0)
         {
 
@@ -76,6 +66,6 @@ void ForceStopBDS()
     TerminateProcess(pi.hProcess,0);
     CloseHandle();
     MessageBox(hWnd,
-        L"已尝试强行停止服务器", TITLE,
+        L"脪脩鲁垄脢脭脟驴脨脨脥拢脰鹿路镁脦帽脝梅", TITLE,
         MB_OK);
 }
