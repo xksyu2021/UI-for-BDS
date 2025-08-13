@@ -3,12 +3,17 @@
 #include "Function.h"
 
 //Send
-bool SendCommand(LPWSTR command)
+bool SendCommand(LPCSTR command)
 {
-	if (WriteFile(UIw_key, command, sizeof(command), NULL, NULL) != 0)
+	DWORD size = strlen(command);
+	if (WriteFile(UIw_key, command, size, NULL, NULL) != 0)
+	{
+		FlushFileBuffers(UIw_key);
 		return true;
-	else {
-		Err(TITLE, _T("Failed to send command!"));
+	}
+	else
+	{
+		Err(_T("Failed to send command!"));
 		return false;
 	}
 }

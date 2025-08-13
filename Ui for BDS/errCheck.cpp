@@ -32,7 +32,7 @@ int Err(ATOM atom, LPCTSTR message)
     }
     return 0;
 }
-int Err(LPCTSTR title, LPCTSTR message)
+int Err(LPCTSTR message)
 {
     if (GetLastError() != 0)
     {
@@ -40,4 +40,8 @@ int Err(LPCTSTR title, LPCTSTR message)
         return 1;
     }
     return 0;
+}
+void ForceErrCheck(LPCTSTR title)
+{
+       MessageBox(NULL, GetError(), title, MB_ICONWARNING);
 }

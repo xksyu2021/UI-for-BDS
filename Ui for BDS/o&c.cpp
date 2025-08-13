@@ -17,48 +17,54 @@ static void AutoClose(DWORD time, LPCWSTR title)
 PROCESS_INFORMATION pi;
 HWND hBDS;
 
-static void CloseHandle()
+static void CloseHandleA()
 {
     CloseHandle(BDSr_key);
     CloseHandle(UIw_key);
     CloseHandle(UIr_log);
     CloseHandle(BDSw_log);
 }
+static void CloseHandleS()
+{
+    CloseHandle(BDSr_key);
+    CloseHandle(BDSw_log);
+}
+
 InitH(BDSr_key); InitH(UIw_key); InitH(BDSw_log); InitH(UIr_log);
 void StartBDS()
 {
     SECURITY_ATTRIBUTES sa = { sizeof(sa), NULL, TRUE };
     if(!CreatePipe(&BDSr_key, &UIw_key, &sa, 0))
-        Err(TITLE, _T("Failed to create pipe_key"));
+        Err(_T("Failed to create pipe_key"));
     if (!CreatePipe(&UIr_log, &BDSw_log, &sa, 0))
-        Err(TITLE, _T("Failed to create pipe_log"));
+        Err(_T("Failed to create pipe_log"));
     STARTUPINFO si = { sizeof(si) };
-    si.dwFlags = STARTF_USESTDHANDLES;
-    si.hStdInput = UIw_key;
+    si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+    si.hStdInput = BDSr_key;
     si.wShowWindow = SW_SHOWMINIMIZED;
 
     if (CreateProcess(
         L"bedrock_server.exe",
         NULL, NULL, NULL, TRUE, NULL, NULL, NULL, &si, &pi))
     {
-        
+        CloseHandleS();
     }
     else {
-        Err(TITLE, _T("Failed to send command to BDS!"));
-        CloseHandle();
+        Err(_T("Failed to send command to BDS!"));
+        CloseHandleA();
     }
 }
 
 void StopBDS()
 {
-    SendCommand(CWORD("stop"));
-    //CloseHandle();
+    SendCommand(C("stop"));
+    CloseHandleA();
 }
 
 void ForceStopBDS()
 {
     TerminateProcess(pi.hProcess,0);
-    CloseHandle();
+    CloseHandleA();
     MessageBox(hWnd,
         _T("已尝试强行停止服务器"), TITLE,
         MB_OK);
