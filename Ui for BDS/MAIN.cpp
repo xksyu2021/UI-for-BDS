@@ -41,7 +41,7 @@ int WINAPI WinMain(
         szWindowClass, szTitle,
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
         CW_USEDEFAULT, CW_USEDEFAULT,
-        530, 560, NULL, NULL,
+        610, 600, NULL, NULL,
         hInstance, NULL
     );
     Err(hWnd,
@@ -77,6 +77,7 @@ int WINAPI WinMain(
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );
 
+
     HWND hLabel_2 = CreateWindow(
         L"STATIC", L"命令输入",
         WS_VISIBLE | WS_CHILD,
@@ -98,6 +99,15 @@ int WINAPI WinMain(
         hWnd, (HMENU)ID_CMD_OK,
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );
+    HWND hCmdClear = CreateWindow(
+        L"BUTTON", L"清空",
+        WS_VISIBLE | WS_CHILD,
+        490, 200, 70, 40,
+        hWnd, (HMENU)ID_CMD_CLEAR,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+
+
     HWND hLabel_3 = CreateWindow(
         L"STATIC", L"快捷命令",
         WS_VISIBLE | WS_CHILD,
@@ -156,7 +166,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT ps;
     HDC hdc;
-    TCHAR greeting[] = _T("by xksyu2021\nYou must obey Minecraft EULA.");
+    TCHAR greeting[] = _T("by xksyu2021\nYou must obey / 您必须遵守 Minecraft EULA.");
 
     switch (message)
     {
@@ -187,6 +197,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             {
                 ForceStopBDS();
             }
+            break;
+        case ID_CMD_OK:
+        {
+            if (GetWindowTextLength(GetDlgItem(hWnd, ID_CMD_KEY)) > 0)
+            {
+                char Command[1024] = { 0 };
+                GetWindowTextA(GetDlgItem(hWnd, ID_CMD_KEY), Command, 1024);
+                std::string temp(Command);
+                temp += "\n";
+                SendCommand(temp.c_str());
+            }
+            break;
+        }
+        case ID_CMD_CLEAR:
+            SetWindowText(GetDlgItem(hWnd, ID_CMD_KEY), _T(" "));
             break;
         case ID_FC_Weather:
             if(!hWeather)
