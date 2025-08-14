@@ -252,6 +252,81 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 LRESULT CALLBACK WeatherProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
+    case WM_CREATE:
+    {
+        HWND hWeaSet = CreateWindow(
+            L"BUTTON", L"基础选项",
+            WS_VISIBLE | WS_CHILD | BS_GROUPBOX,
+            20, 20, 330, 100,
+            hWeather, NULL,
+            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+        );
+        HWND hWeaSet_1 = CreateWindow(
+            L"BUTTON", L"晴天",
+            WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON | WS_GROUP,
+            40, 55, 80, 40,
+            hWeather, (HMENU)ID_FC_Wea_SET_1,
+            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+        );
+        HWND hWeaSet_2 = CreateWindow(
+            L"BUTTON", L"雨天",
+            WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON,
+           140, 55, 80, 40,
+            hWeather, (HMENU)ID_FC_Wea_SET_2,
+            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+        );
+        HWND hWeaSet_3 = CreateWindow(
+            L"BUTTON", L"雷暴",
+            WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON,
+            240, 55, 80, 40,
+            hWeather, (HMENU)ID_FC_Wea_SET_3,
+            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+        );
+
+
+        HWND hLabel_Wea_1 = CreateWindow(
+            L"STATIC", L"高级选项",
+            WS_VISIBLE | WS_CHILD,
+            30, 150, 80, 30,
+            hWeather, NULL,
+            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+        );
+
+        HWND hWeaAdv = CreateWindow(
+            L"BUTTON", L"天气更替",
+            WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX ,
+            30, 190, 110, 40,
+            hWeather, (HMENU)ID_FC_Wea_ADV,
+            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+        );
+
+
+        HWND hWeaOK = CreateWindow(
+            L"BUTTON", L"提交",
+            WS_VISIBLE | WS_CHILD,
+            250, 250, 110, 40,
+            hWeather, (HMENU)ID_FC_Wea_OK,
+            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+        );
+
+        SendMessage(hWeaSet_1, BM_SETCHECK, BST_CHECKED, 0);
+        SendMessage(hWeaAdv, BM_SETCHECK, BST_CHECKED, 0);
+    }
+        break;
+
+    case WM_COMMAND:
+        if (IsDlgButtonChecked(hWeather, ID_FC_Wea_ADV) == BST_CHECKED)
+            SendCommand(C(""));
+
+        if (IsDlgButtonChecked(hWeather, ID_FC_Wea_SET_1) == BST_CHECKED)
+            SendCommand(C(""));
+        else if (IsDlgButtonChecked(hWeather, ID_FC_Wea_SET_2) == BST_CHECKED)
+            SendCommand(C(""));
+        else SendCommand(C(""));
+
+        MessageBox(hWnd, L"已发送", L"天气控制", MB_OK);
+        DestroyWindow(hWnd);
+
     case WM_CLOSE:
         DestroyWindow(hWnd);
         break;
