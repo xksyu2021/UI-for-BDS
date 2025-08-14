@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
-// #include <iostream>
+#include <iostream>
 #include <fstream>
 
 #define TEST MessageBox(hWnd,L"Success!",L"step test",MB_OK)

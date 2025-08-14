@@ -4,6 +4,20 @@
 
 HWND hWnd = NULL;
 
+static HFONT Font()
+{
+    HFONT hFont = CreateFont(
+        -40,
+        0, 0, 0,
+        FW_NORMAL, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        ANTIALIASED_QUALITY,
+        FF_ROMAN,
+        L"Arial"
+    );
+    return hFont;
+}
+
 //Basic info
 static TCHAR szWindowClass[] = _T("ufb"); 
 static TCHAR szTitle[] = TITLE;
@@ -131,6 +145,16 @@ int WINAPI WinMain(
     );
 
 
+    HWND hOpenLog = CreateWindow(
+        L"BUTTON", L"打开日志",
+        WS_VISIBLE | WS_CHILD,
+        302, 500, 110, 40,
+        hWnd, (HMENU)ID_LOG,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+
+
+
     //Font
     HFONT hFont = CreateFont(
         -40,
@@ -159,8 +183,10 @@ int WINAPI WinMain(
 //Behavior of controls
 InitHWND(hTime); 
 InitHWND(hWeather);
-LRESULT CALLBACK TimeProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam); 
-LRESULT CALLBACK WeatherProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+InitHWND(hLog);
+LRESULT CALLBACK TimeProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam); 
+LRESULT CALLBACK WeatherProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK LogProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -170,6 +196,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message)
     {
+    case WM_CREATE:
+        ClearLog();
+
     case WM_PAINT:
         hdc = BeginPaint(hWnd, &ps);
         TextOut(hdc,
@@ -190,10 +219,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             StopBDS();
             break;
         case ID_STOP_FORCE:
-            if(MessageBox(hWnd,
-                L"强制关闭服务器是非常危险的操作！\n是否仍要继续？",TITLE, 
-                MB_OKCANCEL | MB_APPLMODAL | MB_ICONWARNING) 
-                == 1 )
+            if (MessageBox(hWnd,
+                L"强制关闭服务器是非常危险的操作！\n是否仍要继续？", TITLE,
+                MB_OKCANCEL | MB_APPLMODAL | MB_ICONWARNING)
+                == 1)
             {
                 ForceStopBDS();
             }
@@ -214,12 +243,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             SetWindowText(GetDlgItem(hWnd, ID_CMD_KEY), _T(" "));
             break;
         case ID_FC_Weather:
-            if(!hWeather)
+            if (!hWeather)
             {
                 HINSTANCE HI_FC_weather = NULL;
                 hWeather = CreateChildWindow(hWnd,
                     _T("天气控制"),
-                    700, 700,
+                    400, 370,
                     WeatherProc, _T("fc_wea"), HI_FC_weather);
             }
             break;
@@ -229,16 +258,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 HINSTANCE HI_FC_time = NULL;
                 hTime = CreateChildWindow(hWnd,
                     _T("时间控制"),
-                    700, 700,
+                    600, 440,
                     TimeProc, _T("fc_time"), HI_FC_time);
             }
             break;
+        case ID_LOG:
+            if (!hLog)
+            {
+                HINSTANCE HI_Log = NULL;
+                hLog = CreateNewWindow(
+                    _T("日志"),
+                    1000, 620,
+                    LogProc, _T("log"), HI_Log);
+            }
+            break;
         }
-
+        break;
     }
-    break;
-
     case WM_DESTROY:
+        StopBDS();
         PostQuitMessage(0);
         break;
     default:
@@ -249,38 +287,38 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-
-LRESULT CALLBACK WeatherProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK WeatherProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
     case WM_CREATE:
     {
+        HFONT hFont1 = Font();
         HWND hWeaSet = CreateWindow(
             L"BUTTON", L"基础选项",
             WS_VISIBLE | WS_CHILD | BS_GROUPBOX,
             20, 20, 330, 100,
-            hWeather, NULL,
-            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+            hWnd1, NULL,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hWeaSet_1 = CreateWindow(
             L"BUTTON", L"晴天",
             WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON | WS_GROUP,
             40, 55, 80, 40,
-            hWeather, (HMENU)ID_FC_Wea_SET_1,
-            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+            hWnd1, (HMENU)ID_FC_Wea_SET_1,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hWeaSet_2 = CreateWindow(
             L"BUTTON", L"雨天",
             WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON,
            140, 55, 80, 40,
-            hWeather, (HMENU)ID_FC_Wea_SET_2,
-            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+            hWnd1, (HMENU)ID_FC_Wea_SET_2,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hWeaSet_3 = CreateWindow(
             L"BUTTON", L"雷暴",
             WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON,
             240, 55, 80, 40,
-            hWeather, (HMENU)ID_FC_Wea_SET_3,
-            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+            hWnd1, (HMENU)ID_FC_Wea_SET_3,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
 
 
@@ -288,16 +326,16 @@ LRESULT CALLBACK WeatherProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
             L"STATIC", L"高级选项",
             WS_VISIBLE | WS_CHILD,
             30, 150, 80, 30,
-            hWeather, NULL,
-            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+            hWnd1, NULL,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
 
         HWND hWeaAdv = CreateWindow(
             L"BUTTON", L"天气更替",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX ,
             30, 190, 110, 40,
-            hWeather, (HMENU)ID_FC_Wea_ADV,
-            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+            hWnd1, (HMENU)ID_FC_Wea_ADV,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
 
 
@@ -305,8 +343,8 @@ LRESULT CALLBACK WeatherProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
             L"BUTTON", L"提交",
             WS_VISIBLE | WS_CHILD,
             250, 250, 110, 40,
-            hWeather, (HMENU)ID_FC_Wea_OK,
-            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+            hWnd1, (HMENU)ID_FC_Wea_OK,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
 
         SendMessage(hWeaSet_1, BM_SETCHECK, BST_CHECKED, 0);
@@ -315,40 +353,86 @@ LRESULT CALLBACK WeatherProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
         break;
 
     case WM_COMMAND:
-        if (IsDlgButtonChecked(hWeather, ID_FC_Wea_ADV) == BST_CHECKED)
-            SendCommand(C(""));
+    {
+        WORD wmId = LOWORD(wParam);
+        switch (wmId)
+        {
+        case ID_FC_Wea_OK:
+            if (IsDlgButtonChecked(hWnd1, ID_FC_Wea_ADV) == BST_CHECKED)
+                SendCommand(C("gamerule doWeatherCycle true"));
+            else SendCommand(C("gamerule doWeatherCycle false"));
 
-        if (IsDlgButtonChecked(hWeather, ID_FC_Wea_SET_1) == BST_CHECKED)
-            SendCommand(C(""));
-        else if (IsDlgButtonChecked(hWeather, ID_FC_Wea_SET_2) == BST_CHECKED)
-            SendCommand(C(""));
-        else SendCommand(C(""));
+            if (IsDlgButtonChecked(hWnd1, ID_FC_Wea_SET_1) == BST_CHECKED)
+                SendCommand(C("weather clear"));
+            else if (IsDlgButtonChecked(hWnd1, ID_FC_Wea_SET_2) == BST_CHECKED)
+                SendCommand(C("weather rain"));
+            else SendCommand(C("weather thunder"));
 
-        MessageBox(hWnd, L"已发送", L"天气控制", MB_OK);
-        DestroyWindow(hWnd);
+            DestroyWindow(hWnd1);
+
+            break;
+
+        default:
+            break;
+        }
+        break;
+    }
+        
 
     case WM_CLOSE:
-        DestroyWindow(hWnd);
+        DestroyWindow(hWnd1);
         break;
     case WM_DESTROY:
         hWeather = NULL;
         break;
     default:
-        return DefWindowProc(hWnd, msg, wParam, lParam);
+        return DefWindowProc(hWnd1, msg, wParam, lParam);
     }
     return 0;
 }
 
-LRESULT CALLBACK TimeProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK TimeProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
+    case WM_CREATE:
+    {
+        HFONT hFont1 = Font();
+        break;
+    }
     case WM_CLOSE:
-        DestroyWindow(hWnd);
+        DestroyWindow(hWnd1);
         break;
     case WM_DESTROY:
         hTime = NULL;
         break;
     default:
-        return DefWindowProc(hWnd, msg, wParam, lParam);
+        return DefWindowProc(hWnd1, msg, wParam, lParam);
+    }
+    return 0;
+}
+
+LRESULT CALLBACK LogProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    switch (msg) {
+    case WM_CREATE:
+    {
+        HFONT hFont1 = Font();
+        HWND hLog = CreateWindow(
+            L"EDIT", L"Null",
+            WS_VISIBLE | WS_CHILD | WS_BORDER | WS_VSCROLL | ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL,
+            30, 30, 910, 510,
+            hWnd1, (HMENU)ID_LOG_OUTPUT,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        break;
+    }
+    case WM_CLOSE:
+        DestroyWindow(hWnd1);
+        break;
+    case WM_DESTROY:
+        hLog = NULL;
+        break;
+    default:
+        return DefWindowProc(hWnd1, msg, wParam, lParam);
     }
     return 0;
 }

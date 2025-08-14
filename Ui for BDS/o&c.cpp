@@ -41,6 +41,7 @@ void StartBDS()
     STARTUPINFO si = { sizeof(si) };
     si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
     si.hStdInput = BDSr_key;
+    si.hStdOutput = BDSw_log;
     si.wShowWindow = SW_SHOWMINIMIZED;
 
     if (CreateProcess(
@@ -57,15 +58,21 @@ void StartBDS()
 
 void StopBDS()
 {
-    SendCommand(C("stop"));
-    CloseHandleA();
+    if (pi.hProcess)
+    {
+        SendCommand(C("stop"));
+        CloseHandleA();
+    }
 }
 
 void ForceStopBDS()
 {
-    TerminateProcess(pi.hProcess,0);
-    CloseHandleA();
-    MessageBox(hWnd,
-        _T("已尝试强行停止服务器"), TITLE,
-        MB_OK);
+    if(pi.hProcess)
+    {
+        TerminateProcess(pi.hProcess, 0);
+        CloseHandleA();
+        MessageBox(hWnd,
+            _T("已尝试强行停止服务器"), TITLE,
+            MB_OK);
+    }
 }

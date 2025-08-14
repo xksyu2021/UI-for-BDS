@@ -16,7 +16,6 @@ int Err(HWND hwnd, LPCTSTR message)
 {
     if (!hwnd)
     {
-        DWORD error = GetLastError();
         MessageBox(NULL, message, GetError(), MB_ICONERROR);
         return 1;
     }
@@ -26,7 +25,6 @@ int Err(ATOM atom, LPCTSTR message)
 {
     if (!atom)
     {
-        DWORD error = GetLastError();
         MessageBox(NULL, message, GetError(), MB_ICONERROR);
         return 1;
     }
@@ -44,4 +42,23 @@ int Err(LPCTSTR message)
 void ForceErrCheck(LPCTSTR title)
 {
        MessageBox(NULL, GetError(), title, MB_ICONWARNING);
+}
+
+int Err(std::ifstream* file, LPCTSTR message)
+{
+    if (!file)
+    {
+        MessageBox(NULL, message, GetError(), MB_ICONERROR);
+        return 1;
+    }
+    return 0;
+}
+int Err(std::fstream* file, LPCTSTR message)
+{
+    if (!file)
+    {
+        MessageBox(NULL, message, GetError(), MB_ICONERROR);
+        return 1;
+    }
+    return 0;
 }
