@@ -53,7 +53,7 @@ int Err(std::ifstream* file, LPCTSTR message)
     }
     return 0;
 }
-int Err(std::fstream* file, LPCTSTR message)
+int Err(std::ofstream* file, LPCTSTR message)
 {
     if (!file)
     {

@@ -24,7 +24,7 @@ HWND CreateChildWindow(HWND hFather, LPCWCHAR childTitle ,int x, int y, WNDPROC 
     hChild = CreateWindowEx(
         NULL,
         className, childTitle,
-        WS_POPUP | WS_VISIBLE |  WS_CAPTION | WS_SYSMENU,
+        WS_POPUP | WS_VISIBLE |  WS_CAPTION | WS_SYSMENU ,
         700, 300,
         x, y, hFather, NULL,
         hInstanceF, NULL
@@ -34,12 +34,12 @@ HWND CreateChildWindow(HWND hFather, LPCWCHAR childTitle ,int x, int y, WNDPROC 
     return hChild;
 }
 
-HWND CreateNewWindow(LPCWCHAR childTitle, int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstanceF)
+HWND CreateLogWindow(LPCWCHAR childTitle, int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstanceF)
 {
     HWND hChild = NULL;
     static WNDCLASSEX wcexF;
     wcexF.cbSize = sizeof(WNDCLASSEX);
-    wcexF.style = CS_HREDRAW | CS_VREDRAW;
+    wcexF.style = CS_HREDRAW | CS_VREDRAW | CS_NOCLOSE;
     wcexF.lpfnWndProc = procFunc;
     wcexF.cbClsExtra = 0;
     wcexF.cbWndExtra = 0;
@@ -56,8 +56,8 @@ HWND CreateNewWindow(LPCWCHAR childTitle, int x, int y, WNDPROC procFunc, LPCWCH
     hChild = CreateWindowEx(
         NULL,
         className, childTitle,
-        WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU,
-        700, 300,
+        WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+        1000, 400,
         x, y, NULL , NULL,
         hInstanceF, NULL
     );

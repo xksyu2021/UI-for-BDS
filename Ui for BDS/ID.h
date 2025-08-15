@@ -28,5 +28,5 @@ extern HWND hWnd;
 #define ID_FC_Time_ADV 30202
 #define ID_FC_Time_MAN 30203
 #define ID_FC_Time_OK 30210
-#define ID_LOG 40001
-#define ID_LOG_OUTPUT 40101
+#define ID_LOG 40101
+#define ID_LOG_CLEAR 40102

@@ -6,7 +6,7 @@ int Err(ATOM atom, LPCTSTR message);
 int Err(LPCTSTR message);
 void ForceErrCheck(LPCTSTR title);
 int Err(std::ifstream* file, LPCTSTR message);
-int Err(std::fstream* file, LPCTSTR message);
+int Err(std::ofstream* file, LPCTSTR message);
 
 void StartBDS();
 void StopBDS();
@@ -18,4 +18,4 @@ void ClearLog();
 void Log(HWND hwnd);
 
 HWND CreateChildWindow(HWND hFather, LPCWCHAR childTitle, int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstance);
-HWND CreateNewWindow(LPCWCHAR childTitle, int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstanceF);
+HWND CreateLogWindow(LPCWCHAR childTitle, int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstanceF);

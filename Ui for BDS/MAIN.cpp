@@ -144,17 +144,6 @@ int WINAPI WinMain(
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );
 
-
-    HWND hOpenLog = CreateWindow(
-        L"BUTTON", L"打开日志",
-        WS_VISIBLE | WS_CHILD,
-        302, 500, 110, 40,
-        hWnd, (HMENU)ID_LOG,
-        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
-    );
-
-
-
     //Font
     HFONT hFont = CreateFont(
         -40,
@@ -197,7 +186,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
+    {
         ClearLog();
+        HINSTANCE HI_Log = NULL;
+        hLog = CreateLogWindow(
+            _T("日志"),
+            1000, 690,
+            LogProc, _T("log"), HI_Log);
+        Log(GetDlgItem(hLog, ID_LOG));
+        break;
+    }
 
     case WM_PAINT:
         hdc = BeginPaint(hWnd, &ps);
@@ -260,16 +258,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     _T("时间控制"),
                     600, 440,
                     TimeProc, _T("fc_time"), HI_FC_time);
-            }
-            break;
-        case ID_LOG:
-            if (!hLog)
-            {
-                HINSTANCE HI_Log = NULL;
-                hLog = CreateNewWindow(
-                    _T("日志"),
-                    1000, 620,
-                    LogProc, _T("log"), HI_Log);
             }
             break;
         }
@@ -415,20 +403,41 @@ LRESULT CALLBACK LogProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg) {
     case WM_CREATE:
     {
+        SetTimer(hWnd1, 1, 100, NULL);
         HFONT hFont1 = Font();
         HWND hLog = CreateWindow(
             L"EDIT", L"Null",
             WS_VISIBLE | WS_CHILD | WS_BORDER | WS_VSCROLL | ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL,
             30, 30, 910, 510,
-            hWnd1, (HMENU)ID_LOG_OUTPUT,
+            hWnd1, (HMENU)ID_LOG,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hLogClear = CreateWindow(
+            L"BUTTON", L"清屏",
+            WS_VISIBLE | WS_CHILD,
+            790, 570, 110, 40,
+            hWnd1, (HMENU)ID_LOG_CLEAR,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         break;
     }
+    case WM_COMMAND:
+    {
+        WORD wmId = LOWORD(wParam);
+        switch (wmId)
+        {
+        case ID_LOG_CLEAR:
+            SetWindowText(GetDlgItem(hWnd1, ID_LOG), _T(" "));
+            break;
+        }
+    }
+    case WM_TIMER:
+        Log(GetDlgItem(hLog, ID_LOG));
+        break;
     case WM_CLOSE:
-        DestroyWindow(hWnd1);
         break;
     case WM_DESTROY:
+        KillTimer(hWnd1, 1);
         hLog = NULL;
         break;
     default:

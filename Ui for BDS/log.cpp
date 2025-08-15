@@ -2,8 +2,12 @@
 #include "ID.h"
 #include "Function.h"
 
+static  DWORD size = 0;
+static bool statu = TRUE;
+
 static void Reflesh(HWND hwnd)
 {
+    if (!statu) return;
     std::ifstream read;
     read.open("log.txt", std::ios::in);
     Err(&read, _T("Failed to open log.txt"));
@@ -20,18 +24,30 @@ static void Reflesh(HWND hwnd)
 
 static void GetLog()
 {
-    
+    char log[4096] = { 0 };
+    statu = ReadFile(UIr_log, log, sizeof(log), &size, NULL);
+    if (!statu || size < 4) 
+    {
+        statu = FALSE;
+        return;
+    }
+    std::ofstream write("log.txt", std::ios::app);
+    Err(&write, _T("Failed to open log.txt"));
+    write << log;
+    write.close();
 }
 
 void ClearLog()
 {
-    std::ofstream output;
-    output.open("log.txt", std::ios::out);
-    output.close();
+    std::ofstream clear;
+    Err(&clear, _T("Failed to open log.txt"));
+    clear.open("log.txt", std::ios::out);
+    clear.close();
 }
 
 void Log(HWND hwnd)
 {
     GetLog();
     Reflesh(hwnd);
+    size = 0;
 }
