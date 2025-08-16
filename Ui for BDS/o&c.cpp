@@ -23,6 +23,10 @@ static void CloseHandleA()
     CloseHandle(UIw_key);
     CloseHandle(UIr_log);
     CloseHandle(BDSw_log);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+    BDSr_key = UIw_key = UIr_log = BDSw_log = NULL;
+    pi.hProcess = pi.hThread = NULL;
 }
 static void CloseHandleS()
 {
@@ -33,7 +37,8 @@ static void CloseHandleS()
 InitH(BDSr_key); InitH(UIw_key); InitH(BDSw_log); InitH(UIr_log);
 void StartBDS()
 {
-    SECURITY_ATTRIBUTES sa = { sizeof(sa), NULL, TRUE };
+    SECURITY_ATTRIBUTES sa = { sizeof(sa),NULL , TRUE };
+
     if(!CreatePipe(&BDSr_key, &UIw_key, &sa, 0))
         Err(_T("Failed to create pipe_key"));
     if (!CreatePipe(&UIr_log, &BDSw_log, &sa, 0))
@@ -42,7 +47,7 @@ void StartBDS()
     si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
     si.hStdInput = BDSr_key;
     si.hStdOutput = BDSw_log;
-    si.wShowWindow = SW_SHOWMINIMIZED;
+    //si.wShowWindow = SW_SHOWMINIMIZED;
 
     if (CreateProcess(
         L"bedrock_server.exe",
@@ -60,8 +65,7 @@ void StopBDS()
 {
     if (pi.hProcess)
     {
-        SendCommand(C("stop"));
-        CloseHandleA();
+        SendCommand_WhenStop(C("stop"));
     }
 }
 

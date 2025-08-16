@@ -13,6 +13,7 @@ void StopBDS();
 void ForceStopBDS();
 
 bool SendCommand(LPCSTR command);
+bool SendCommand_WhenStop(LPCSTR command);
 
 void ClearLog();
 void Log(HWND hwnd);

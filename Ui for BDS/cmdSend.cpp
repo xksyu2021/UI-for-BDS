@@ -13,7 +13,21 @@ bool SendCommand(LPCSTR command)
 	}
 	else
 	{
-		Err(_T("Failed to send command!"));
+		Err(_T("发送命令失败\n可能是因为服务器已被关闭"));
+		return false;
+	}
+}
+
+bool SendCommand_WhenStop(LPCSTR command)
+{
+	DWORD size = strlen(command);
+	if (WriteFile(UIw_key, command, size, NULL, NULL) != 0)
+	{
+		FlushFileBuffers(UIw_key);
+		return true;
+	}
+	else
+	{
 		return false;
 	}
 }

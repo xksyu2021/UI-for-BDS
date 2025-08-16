@@ -2,7 +2,6 @@
 #include "ID.h"
 #include "Function.h"
 
-static  DWORD size = 0;
 static bool statu = TRUE;
 
 static void Reflesh(HWND hwnd)
@@ -10,7 +9,7 @@ static void Reflesh(HWND hwnd)
     if (!statu) return;
     std::ifstream read;
     read.open("log.txt", std::ios::in);
-    Err(&read, _T("Failed to open log.txt"));
+    Err(&read, _T("打开日志文件失败"));
     std::string text(
         (std::istreambuf_iterator<char>(read)),
         std::istreambuf_iterator<char>()
@@ -20,19 +19,24 @@ static void Reflesh(HWND hwnd)
     std::wstring wtext(len, 0);
     MultiByteToWideChar(CP_ACP, 0, text.c_str(), -1, &wtext[0], len);
     SetWindowText(hwnd, wtext.c_str());
+    SendMessage(hwnd, WM_VSCROLL, SB_BOTTOM, 0);
 }
 
 static void GetLog()
 {
-    char log[4096] = { 0 };
-    statu = ReadFile(UIr_log, log, sizeof(log), &size, NULL);
-    if (!statu || size < 4) 
+    static DWORD size = 0;
+    char log[10240] = { 0 };
+
+    PeekNamedPipe(UIr_log, NULL , NULL, NULL,&size,NULL);
+    if(size < 1)
     {
         statu = FALSE;
         return;
     }
+     statu = ReadFile(UIr_log, log, sizeof(log), NULL, NULL);
+
     std::ofstream write("log.txt", std::ios::app);
-    Err(&write, _T("Failed to open log.txt"));
+    Err(&write, _T("打开日志文件失败"));
     write << log;
     write.close();
 }
@@ -40,7 +44,7 @@ static void GetLog()
 void ClearLog()
 {
     std::ofstream clear;
-    Err(&clear, _T("Failed to open log.txt"));
+    Err(&clear, _T("打开日志文件失败"));
     clear.open("log.txt", std::ios::out);
     clear.close();
 }
@@ -49,5 +53,5 @@ void Log(HWND hwnd)
 {
     GetLog();
     Reflesh(hwnd);
-    size = 0;
+    statu = TRUE;
 }

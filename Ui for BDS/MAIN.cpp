@@ -188,6 +188,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_CREATE:
     {
         ClearLog();
+        StartBDS();
         HINSTANCE HI_Log = NULL;
         hLog = CreateLogWindow(
             _T("日志"),
@@ -413,7 +414,7 @@ LRESULT CALLBACK LogProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hLogClear = CreateWindow(
-            L"BUTTON", L"清屏",
+            L"BUTTON", L"清除日志",
             WS_VISIBLE | WS_CHILD,
             790, 570, 110, 40,
             hWnd1, (HMENU)ID_LOG_CLEAR,
@@ -427,8 +428,15 @@ LRESULT CALLBACK LogProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
         switch (wmId)
         {
         case ID_LOG_CLEAR:
-            SetWindowText(GetDlgItem(hWnd1, ID_LOG), _T(" "));
-            break;
+            if (MessageBox(hWnd,
+                L"是否要清除所有日志？", TITLE,
+                MB_OKCANCEL | MB_APPLMODAL | MB_ICONWARNING)
+                == 1)
+            {
+                ClearLog();
+                SetWindowText(GetDlgItem(hWnd1, ID_LOG), _T("Null"));
+                break;
+            }
         }
     }
     case WM_TIMER:
