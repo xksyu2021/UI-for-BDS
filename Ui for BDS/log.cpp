@@ -1,6 +1,7 @@
 #include "Win32.h"
 #include "ID.h"
 #include "Function.h"
+#include "SharedValue.h"
 
 static bool statu = TRUE;
 

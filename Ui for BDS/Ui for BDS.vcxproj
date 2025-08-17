@@ -132,10 +132,12 @@
     <ClInclude Include="Function.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ID.h" />
+    <ClInclude Include="SharedValue.h" />
     <ClInclude Include="Win32.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="childProc.cpp" />
+    <ClCompile Include="childProcSet.cpp" />
     <ClCompile Include="cmdSend.cpp" />
     <ClCompile Include="errCheck.cpp" />
     <ClCompile Include="log.cpp" />
