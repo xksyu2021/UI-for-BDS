@@ -1,4 +1,6 @@
 #include "Win32.h"
+#include "ID.h"
+
 
 static LPWSTR GetError()
 {

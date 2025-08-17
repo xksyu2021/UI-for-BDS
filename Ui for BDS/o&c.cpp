@@ -1,7 +1,6 @@
 #include "Win32.h"
 #include "ID.h"
 #include "Function.h"
-#include "SharedValue.h"
 
 
 static void AutoClose(DWORD time, LPCWSTR title)
@@ -35,7 +34,7 @@ static void CloseHandleS()
     CloseHandle(BDSw_log);
 }
 
-InitHA(BDSr_key); InitHA(UIw_key); InitHA(BDSw_log); InitHA(UIr_log);
+InitH(BDSr_key); InitH(UIw_key); InitH(BDSw_log); InitH(UIr_log);
 void StartBDS()
 {
     SECURITY_ATTRIBUTES sa = { sizeof(sa),NULL , TRUE };
