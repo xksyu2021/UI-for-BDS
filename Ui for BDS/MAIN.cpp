@@ -91,6 +91,13 @@ int WINAPI WinMain(
         hWnd, (HMENU)ID_STOP_FORCE,
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );
+    HWND hUWP = CreateWindow(
+        L"BUTTON", L"解除回环",
+        WS_VISIBLE | WS_CHILD,
+        340, 100, 110, 40,
+        hWnd, (HMENU)ID_DUWP,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
 
 
     HWND hLabel_2 = CreateWindow(
@@ -200,139 +207,6 @@ int WINAPI WinMain(
     return (int)msg.wParam;
 }
 
-//Behavior of controls
-InitHW(hTime);   InitHW(hWeather);   InitHW(hLog);   InitHW(hPlayer);
-LRESULT CALLBACK TimeProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam); 
-LRESULT CALLBACK WeatherProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK LogProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK PlayerProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
-
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    PAINTSTRUCT ps;
-    HDC hdc;
-    TCHAR greeting[] = _T("by xksyu2021\nYou must obey / 您必须遵守 Minecraft EULA.");
-
-    switch (message)
-    {
-    case WM_CREATE:
-    {
-        ClearLog();
-        //StartBDS();
-        HINSTANCE HI_Log = NULL;
-        hLog = CreateLogWindow(
-            _T("日志"),
-            1000, 690,
-            LogProc, _T("log"), HI_Log);
-        Log(GetDlgItem(hLog, ID_LOG));
-        break;
-    }
-
-    case WM_PAINT:
-        hdc = BeginPaint(hWnd, &ps);
-        TextOut(hdc,
-            5, 5,
-            greeting, _tcslen(greeting));
-        EndPaint(hWnd, &ps);
-        break;
-
-    case WM_COMMAND:
-    {
-        WORD wmId = LOWORD(wParam);
-        switch (wmId)
-        {
-        case ID_START:
-            ClearLog();
-            StartBDS();
-            break;
-        case ID_STOP:
-            StopBDS();
-            break;
-        case ID_STOP_FORCE:
-            if (MessageBox(hWnd,
-                L"强制关闭服务器是非常危险的操作！\n是否仍要继续？", TITLE,
-                MB_OKCANCEL | MB_APPLMODAL | MB_ICONWARNING)
-                == 1)
-            {
-                ForceStopBDS();
-            }
-            break;
-
-        case ID_CMD_OK:
-        {
-            if (GetWindowTextLength(GetDlgItem(hWnd, ID_CMD_KEY)) > 0)
-            {
-                char Command[1024] = { 0 };
-                GetWindowTextA(GetDlgItem(hWnd, ID_CMD_KEY), Command, 1024);
-                std::string temp(Command);
-                temp += "\n";
-                SendCommand(temp.c_str());
-            }
-            break;
-        }
-        case ID_CMD_CLEAR:
-            SetWindowText(GetDlgItem(hWnd, ID_CMD_KEY), _T(" "));
-            break;
-
-        case ID_FC_Weather:
-            if (!hWeather)
-            {
-                HINSTANCE HI_FC_weather = NULL;
-                hWeather = CreateChildWindow(hWnd,
-                    _T("天气控制"),
-                    400, 370,
-                    WeatherProc, _T("fc_wea"), HI_FC_weather);
-            }
-            break;
-        case ID_FC_Time:
-            if (!hTime)
-            {
-                HINSTANCE HI_FC_time = NULL;
-                hTime = CreateChildWindow(hWnd,
-                    _T("时间控制"),
-                    400, 415,
-                    TimeProc, _T("fc_time"), HI_FC_time);
-            }
-            break;
-        case ID_FS_WT:
-            SendCommand(C("time query daytime"));
-            SendCommand(C("weather query"));
-            break;
-
-        case ID_FC_PLAYER:
-            if (!hPlayer)
-            {
-                HINSTANCE HI_FC_player = NULL;
-                hPlayer = CreateChildWindow(hWnd,
-                    _T("玩家面板"),
-                    400, 370,
-                    PlayerProc, _T("fc_player"), HI_FC_player);
-            }
-            break;
-        case ID_FS_LIST:
-            SendCommand(C("list"));
-            break;
-        }
-        break;
-    }
-    case WM_CLOSE:
-        if (MessageBox(hWnd,
-            L"服务端若正在运行，将被一并关闭。", TITLE,
-            MB_OKCANCEL | MB_APPLMODAL | MB_ICONWARNING)
-            == 1)
-        {
-            StopBDS();
-            PostQuitMessage(0);
-        }
-        break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        break;
-    default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
-        break;
-    }
-    return 0;
-}
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 

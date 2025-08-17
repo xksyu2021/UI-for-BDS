@@ -270,16 +270,19 @@ LRESULT CALLBACK LogProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
         switch (wmId)
         {
         case ID_LOG_CLEAR:
-            if (MessageBox(hWnd,
+            if (MessageBox(hWnd1,
                 L"是否要清除所有日志？", TITLE,
-                MB_OKCANCEL | MB_APPLMODAL | MB_ICONWARNING)
-                == 1)
+                MB_OKCANCEL | MB_APPLMODAL | MB_ICONQUESTION)
+                == IDOK)
             {
                 ClearLog();
                 SetWindowText(GetDlgItem(hWnd1, ID_LOG), _T("Null"));
-                break;
             }
+            break;
+        default:
+            break;
         }
+        break;
     }
     case WM_TIMER:
         Log(GetDlgItem(hLog, ID_LOG));
@@ -301,19 +304,81 @@ LRESULT CALLBACK PlayerProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam) 
     case WM_CREATE:
     {
         HFONT hFont1 = Font();
-        HWND hWeaSet = CreateWindow(
-            L"BUTTON", L"快速设定",
-            WS_VISIBLE | WS_CHILD | BS_GROUPBOX,
-            20, 20, 330, 150,
+        HWND hLabel_1 = CreateWindow(
+            L"STATIC", L"操作类型",
+            WS_VISIBLE | WS_CHILD,
+            20, 20, 100, 30,
             hWnd1, NULL,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
+        HWND hCmdType = CreateWindow(
+            L"COMBOBOX", NULL,
+            WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
+            130, 20, 200, 160,
+            hWnd1, (HMENU)ID_FC_Player_TYPE,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        SendMessage(hCmdType, CB_ADDSTRING, 0, (LPARAM)L"踢出服务器");
+        SendMessage(hCmdType, CB_ADDSTRING, 0, (LPARAM)L"赋予管理员权限");
+        SendMessage(hCmdType, CB_ADDSTRING, 0, (LPARAM)L"撤销管理员权限");
+        SendMessage(hCmdType, CB_ADDSTRING, 0, (LPARAM)L"更改游戏模式");
+        SendMessage(hCmdType, CB_ADDSTRING, 0, (LPARAM)L"使玩家失败");
+        SendMessage(hCmdType, CB_ADDSTRING, 0, (LPARAM)L"发送私密消息");
+
+        HWND hLabel_2 = CreateWindow(
+            L"STATIC", L"玩家ID",
+            WS_VISIBLE | WS_CHILD,
+            20, 70, 60, 30,
+            hWnd1, NULL,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hPlayerSelect = CreateWindow(
+            L"EDIT", NULL,
+            WS_VISIBLE | WS_CHILD | WS_BORDER | ES_LEFT | ES_MULTILINE | ES_AUTOHSCROLL,
+            20, 90, 310, 40,
+            hWnd1, (HMENU)ID_FC_Player_LIST,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+
+        HWND hLabel_3 = CreateWindow(
+            L"STATIC", L"消息内容",
+            WS_CHILD,
+            20, 150, 90, 30,
+            hWnd1, (HMENU)ID_FC_Player_TEXT_s,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hText = CreateWindow(
+            L"EDIT", NULL,
+            WS_CHILD | WS_BORDER | ES_LEFT | ES_MULTILINE | ES_AUTOVSCROLL,
+            20, 170, 310, 90,
+            hWnd1, (HMENU)ID_FC_Player_TEXT,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+
+        HWND hLabel_4 = CreateWindow(
+            L"STATIC", L"游戏模式",
+            WS_CHILD,
+            20, 150, 100, 30,
+            hWnd1, (HMENU)ID_FC_Player_GM_s,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hGMtype = CreateWindow(
+            L"COMBOBOX", NULL,
+            WS_CHILD | CBS_DROPDOWNLIST,
+            130, 150, 200, 160,
+            hWnd1, (HMENU)ID_FC_Player_GM,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        SendMessage(hGMtype, CB_ADDSTRING, 0, (LPARAM)L"冒险");
+        SendMessage(hGMtype, CB_ADDSTRING, 0, (LPARAM)L"生存");
+        SendMessage(hGMtype, CB_ADDSTRING, 0, (LPARAM)L"创造");
+        SendMessage(hGMtype, CB_ADDSTRING, 0, (LPARAM)L"旁观");
 
 
-        HWND hWeaOK = CreateWindow(
+        HWND hPlayerOK = CreateWindow(
             L"BUTTON", L"提交",
             WS_VISIBLE | WS_CHILD,
-            250, 300, 110, 40,
+            220, 280, 110, 40,
             hWnd1, (HMENU)ID_FC_Player_OK,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
@@ -324,12 +389,97 @@ LRESULT CALLBACK PlayerProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam) 
     case WM_COMMAND:
     {
         WORD wmId = LOWORD(wParam);
+
+        WORD wmEvent = HIWORD(wParam);
+        if (wmEvent == CBN_SELCHANGE && wmId == ID_FC_Player_TYPE)
+        {
+            int selected = SendMessage(GetDlgItem(hWnd1, ID_FC_Player_TYPE), CB_GETCURSEL, 0, 0);
+            ShowWindow(GetDlgItem(hWnd1, ID_FC_Player_GM), SW_HIDE);
+            ShowWindow(GetDlgItem(hWnd1, ID_FC_Player_TEXT), SW_HIDE);
+            ShowWindow(GetDlgItem(hWnd1, ID_FC_Player_GM_s), SW_HIDE);
+            ShowWindow(GetDlgItem(hWnd1, ID_FC_Player_TEXT_s), SW_HIDE);
+            switch (selected)
+            {
+            case 3:
+                ShowWindow(GetDlgItem(hWnd1, ID_FC_Player_GM), SW_SHOW);
+                ShowWindow(GetDlgItem(hWnd1, ID_FC_Player_GM_s), SW_SHOW);
+                break;
+            case 5:
+                ShowWindow(GetDlgItem(hWnd1, ID_FC_Player_TEXT), SW_SHOW);
+                ShowWindow(GetDlgItem(hWnd1, ID_FC_Player_TEXT_s), SW_SHOW);
+                break;
+            }
+        }
+
         switch (wmId)
         {
         case ID_FC_Player_OK:
+        {
+            char ID[512] = {0};
+            char TEXT[2048] = { 0 };
+            GetWindowTextA(GetDlgItem(hWnd1, ID_FC_Player_LIST), ID, 512);
+            GetWindowTextA(GetDlgItem(hWnd1, ID_FC_Player_TEXT), TEXT, 512);
+            int type = SendMessage(GetDlgItem(hWnd1, ID_FC_Player_TYPE), CB_GETCURSEL, 0, 0);
+            switch (type)
+            {
+            case 0:
+            {
+                SendCommand_WithID("kick", ID, "");
+                break;
+            }
+            case 1:
+            {
+                SendCommand_WithID("op", ID, "");
+                break;
+            }
+            case 2:
+            {
+                SendCommand_WithID("deop", ID, "");
+                break;
+            }
+            case 3:
+            {
+                int gm = SendMessage(GetDlgItem(hWnd1, ID_FC_Player_GM), CB_GETCURSEL, 0, 0);
+                switch (gm)
+                {
+                case 0:
+                {
+                    SendCommand_WithID("gamemode 2", ID, "");
+                    break;
+                }
+                case 1:
+                {
+                    SendCommand_WithID("gamemode 0", ID, "");
+                    break;
+                }
+                case 2:
+                {
+                    SendCommand_WithID("gamemode 1", ID, "");
+                    break;
+                }
+                case 3:
+                {
+                    SendCommand_WithID("gamemode 3", ID, "");
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
+            case 4:
+            {
+                SendCommand_WithID("kill", ID, "");
+                break;
+            }
+            case 5:
+                SendCommand_WithID("msg", ID, TEXT);
+                break;
+            }
 
+            MessageBox(hWnd1, L"已发送指令", TITLE, MB_OK);
             DestroyWindow(hWnd1);
             break;
+        }
 
         default:
             break;

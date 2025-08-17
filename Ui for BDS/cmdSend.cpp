@@ -32,3 +32,9 @@ bool SendCommand_WhenStop(LPCSTR command)
 		return false;
 	}
 }
+
+bool SendCommand_WithID(const std::string& front, const std::string& id, const std::string& behind)
+{
+	std::string temp = front + " " + id + " " + behind + "\n";
+	return SendCommand(temp.c_str());
+}
