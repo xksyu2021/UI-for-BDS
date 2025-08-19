@@ -42,3 +42,6 @@
 
 #define ID_LOG 50101
 #define ID_LOG_CLEAR 50102
+
+#define ID_FILE_Config 5100
+#define ID_FILE_Backup 5200

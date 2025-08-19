@@ -1,5 +1,7 @@
 #include "Win32.h"
 
+static bool errShow = FALSE;
+
 static LPWSTR GetError()
 {
     DWORD error = GetLastError();
@@ -12,27 +14,33 @@ static LPWSTR GetError()
 
 int Err(HWND hwnd, LPCTSTR message)
 {
-    if (!hwnd)
+    if ((!hwnd) && !errShow)
     {
+        errShow = TRUE;
         MessageBox(NULL, message, GetError(), MB_ICONERROR);
+        errShow = FALSE;
         return 1;
     }
     return 0;
 }
 int Err(ATOM atom, LPCTSTR message)
 {
-    if (!atom)
+    if ((!atom) && !errShow)
     {
+        errShow = TRUE;
         MessageBox(NULL, message, GetError(), MB_ICONERROR);
+        errShow = FALSE;
         return 1;
     }
     return 0;
 }
 int Err(LPCTSTR message)
 {
-    if (GetLastError() != 0)
+    if ((GetLastError() != 0) && !errShow)
     {
+        errShow = TRUE;
         MessageBox(NULL, message, GetError(), MB_ICONERROR);
+        errShow = FALSE;
         return 1;
     }
     return 0;
@@ -44,18 +52,22 @@ void ForceErrCheck(LPCTSTR title)
 
 int Err(std::ifstream* file, LPCTSTR message)
 {
-    if (!file)
+    if ((!file) && !errShow)
     {
+        errShow = TRUE;
         MessageBox(NULL, message, GetError(), MB_ICONERROR);
+        errShow = FALSE;
         return 1;
     }
     return 0;
 }
 int Err(std::ofstream* file, LPCTSTR message)
 {
-    if (!file)
+    if ((!file) && !errShow)
     {
+        errShow = TRUE;
         MessageBox(NULL, message, GetError(), MB_ICONERROR);
+        errShow = FALSE;
         return 1;
     }
     return 0;

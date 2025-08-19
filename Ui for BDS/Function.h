@@ -13,7 +13,7 @@ void StopBDS();
 void ForceStopBDS();
 
 bool SendCommand(LPCSTR command);
-bool SendCommand_WhenStop(LPCSTR command);
+bool SendCommand_NoErr(LPCSTR command);
 bool SendCommand_WithID(const std::string& front, const std::string& id, const std::string& behind);
 
 

@@ -56,7 +56,7 @@ int WINAPI WinMain(
         szWindowClass, szTitle,
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
         CW_USEDEFAULT, CW_USEDEFAULT,
-        610, 600, NULL, NULL,
+        610, 800, NULL, NULL,
         hInstance, NULL
     );
     Err(hWnd,
@@ -93,7 +93,7 @@ int WINAPI WinMain(
     );
     HWND hUWP = CreateWindow(
         L"BUTTON", L"解除回环",
-        WS_VISIBLE | WS_CHILD,
+        /*WS_VISIBLE | */WS_CHILD,
         340, 100, 110, 40,
         hWnd, (HMENU)ID_DUWP,
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
@@ -179,6 +179,28 @@ int WINAPI WinMain(
         WS_VISIBLE | WS_CHILD,
         160, 410, 150, 40,
         hWnd, (HMENU)ID_FS_LIST,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+
+    HWND hLabel_5 = CreateWindow(
+        L"STATIC", L"文件与配置操作",
+        WS_VISIBLE | WS_CHILD,
+        30, 470, 150, 30,
+        hWnd, NULL,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+    HWND hFIconf = CreateWindow(
+        L"BUTTON", L"编辑配置文件",
+        WS_VISIBLE | WS_CHILD,
+        30, 510, 150, 40,
+        hWnd, (HMENU)ID_FILE_Config,
+        (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
+    );
+    HWND hFIbk = CreateWindow(
+        L"BUTTON", L"备份存档",
+        WS_VISIBLE | WS_CHILD,
+        210, 510, 110, 40,
+        hWnd, (HMENU)ID_FILE_Backup,
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );
 

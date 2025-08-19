@@ -3,12 +3,15 @@
 #include "Function.h"
 #include "SharedValue.h"
 
-InitHW(hTime);   InitHW(hWeather);   InitHW(hLog);   InitHW(hPlayer);
+InitHW(hTime);   InitHW(hWeather);   InitHW(hLog);   InitHW(hPlayer); InitHW(hConfig);
 
 LRESULT CALLBACK TimeProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK WeatherProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK LogProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK PlayerProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
+
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -63,9 +66,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case ID_DUWP:
             ShellExecute(
-                NULL, L"open",
-                L"C:\\windows\\system32\\cmd.exe",
-                L"/c start powershell.exe -Command \"Get-ChildItem -Path Registry::'HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppContainer\\Mappings\\' -name | ForEach-Object {CheckNetIsolation.exe LoopbackExempt -a -p=$_}\"" ,               
+                NULL, L"runas",
+                L"C:\\windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                L"-NoProfile -ExecutionPolicy Bypass -Command \"Get-ChildItem -Path Registry::'HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppContainer\\Mappings\\' -name | ForEach-Object {CheckNetIsolation.exe LoopbackExempt -a -p=$_}\"" ,               
                 NULL, SW_SHOWNORMAL
             );
             break;
@@ -106,8 +109,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
             break;
         case ID_FS_WT:
-            SendCommand(C("time query daytime"));
-            SendCommand(C("weather query"));
+            if (SendCommand_NoErr(C("time query daytime")) == FALSE  || 
+                SendCommand_NoErr(C("weather query")) == FALSE)
+            {
+                Err(_T("发送命令失败\n可能是因为服务器已被关闭"));
+            }
             break;
 
         case ID_FC_PLAYER:
@@ -122,6 +128,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case ID_FS_LIST:
             SendCommand(C("list"));
+            break;
+        case ID_FILE_Config:
+            if (!hConfig)
+            {
+                HINSTANCE HI_FI_config = NULL;
+                hConfig = CreateChildWindow(hWnd,
+                    _T("配置文件编辑"),
+                    700, 1000,
+                    ConfProc, _T("fc_player"), HI_FI_config);
+            }
             break;
         }
         break;

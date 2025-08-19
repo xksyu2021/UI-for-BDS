@@ -66,7 +66,7 @@ void StopBDS()
 {
     if (pi.hProcess)
     {
-        SendCommand_WhenStop(C("stop"));
+        SendCommand_NoErr(C("stop"));
     }
 }
 

@@ -139,6 +139,7 @@
     <ClCompile Include="childProc.cpp" />
     <ClCompile Include="childProcSet.cpp" />
     <ClCompile Include="cmdSend.cpp" />
+    <ClCompile Include="configEdit.cpp" />
     <ClCompile Include="errCheck.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="mainProc.cpp" />

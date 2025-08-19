@@ -19,7 +19,7 @@ bool SendCommand(LPCSTR command)
 	}
 }
 
-bool SendCommand_WhenStop(LPCSTR command)
+bool SendCommand_NoErr(LPCSTR command)
 {
 	DWORD size = strlen(command);
 	if (WriteFile(UIw_key, command, size, NULL, NULL) != 0)
