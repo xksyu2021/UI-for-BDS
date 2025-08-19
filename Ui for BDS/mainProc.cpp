@@ -135,7 +135,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 HINSTANCE HI_FI_config = NULL;
                 hConfig = CreateChildWindow(hWnd,
                     _T("配置文件编辑"),
-                    700, 1000,
+                    570, 1200,
                     ConfProc, _T("fc_player"), HI_FI_config);
             }
             break;
@@ -145,7 +145,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_CLOSE:
         if (MessageBox(hWnd,
             L"您正在关闭主程序！\n若服务端正在运行，将被一并正常关闭。\n若有正在执行的任务，将被强行停止。", TITLE,
-            MB_OKCANCEL | MB_OKCANCEL | MB_ICONWARNING)
+            MB_OKCANCEL  | MB_ICONWARNING)
             == 1)
         {
             StopBDS();
