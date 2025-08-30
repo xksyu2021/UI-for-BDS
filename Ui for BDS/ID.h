@@ -2,21 +2,21 @@
 
 // #define ID_
 
-#define ID_START 10001
-#define ID_STOP 10002
-#define ID_STOP_FORCE 10003
-#define ID_DUWP 10004
+#define ID_START 1001
+#define ID_STOP 1002
+#define ID_STOP_FORCE 1003
+#define ID_DUWP 1004
 
-#define ID_CMD_KEY 20001
-#define ID_CMD_OK 20002
-#define ID_CMD_CLEAR 20003
+#define ID_CMD_KEY 2001
+#define ID_CMD_OK 2002
+#define ID_CMD_CLEAR 2003
 
-#define ID_FC_Weather 30100
-#define ID_FC_Wea_SET_1 30101
-#define ID_FC_Wea_SET_2 30102
-#define ID_FC_Wea_SET_3 30103
-#define ID_FC_Wea_ADV 30110
-#define ID_FC_Wea_OK 30120
+#define ID_FC_Weather 3100
+#define ID_FC_Wea_SET_1 3101
+#define ID_FC_Wea_SET_2 3102
+#define ID_FC_Wea_SET_3 3103
+#define ID_FC_Wea_ADV 3110
+#define ID_FC_Wea_OK 3120
 
 #define ID_FC_Time 3200
 #define ID_FC_Time_SET_1 3201

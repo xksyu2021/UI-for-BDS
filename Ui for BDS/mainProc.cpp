@@ -31,6 +31,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             1000, 690,
             LogProc, _T("log"), HI_Log);
         Log(GetDlgItem(hLog, ID_LOG));
+        //MessageBox(hWnd,
+        //    L"这是测试版程序\n数据无价，谨慎操作！", TITLE,
+        //    MB_OK | MB_ICONWARNING);
         break;
     }
 

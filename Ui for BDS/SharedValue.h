@@ -2,6 +2,7 @@
 
 #define InitHA(x) HANDLE x = NULL
 #define InitHW(x) HWND x = NULL
+#define H_ (HMENU)
 
 #define C(x) (x "\n")
 

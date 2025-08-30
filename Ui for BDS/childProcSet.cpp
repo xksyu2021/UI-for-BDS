@@ -1,5 +1,4 @@
 #include "Win32.h"
-#include "ID.h"
 #include "Function.h"
 
 HWND CreateChildWindow(HWND hFather, LPCWCHAR childTitle ,int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstanceF)

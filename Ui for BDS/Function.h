@@ -1,5 +1,4 @@
 #pragma once
-#include "Win32.h"
 
 int Err(HWND hwnd, LPCTSTR message);
 int Err(ATOM atom, LPCTSTR message);

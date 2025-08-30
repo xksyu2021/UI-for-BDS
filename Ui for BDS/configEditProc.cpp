@@ -1,7 +1,7 @@
 #include "Win32.h"
-#include "ID.h"
 #include "Function.h"
 #include "SharedValue.h"
+#include "ConfigID.h"
 
 HFONT Font();
 
@@ -24,7 +24,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"EDIT", L"不修改",
             WS_VISIBLE | WS_CHILD | WS_BORDER |  ES_MULTILINE,
             150, 20, 300, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_ServerName,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
 
@@ -46,7 +46,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"COMBOBOX", NULL,
             WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
             150, 150, 150, 100,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_GameMode,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         SendMessage(hGamemode, CB_ADDSTRING, 0, (LPARAM)L"不修改");
@@ -58,7 +58,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"BUTTON", L"强制游戏模式",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             320, 145, 150, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_ForeceGameMode,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hLabel_3 = CreateWindow(
@@ -72,7 +72,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"COMBOBOX", NULL,
             WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
             150, 195, 150, 100,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_GameDifficuty,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         SendMessage(hDifficulty, CB_ADDSTRING, 0, (LPARAM)L"不修改");
@@ -86,14 +86,14 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"BUTTON", L"作弊模式",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             20, 255, 110, 40,
-            hWnd1, NULL,
+            hWnd1, H_ CONF_Cheat,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hCheat_1 = CreateWindow(
             L"BUTTON", L"不修改此项",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             150, 255, 150, 40,
-            hWnd1, NULL,
+            hWnd1, H_ CONF_Cheat_NOEDIT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         SendMessage(hCheat_1, BM_SETCHECK, BST_CHECKED, 0);
@@ -109,7 +109,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"COMBOBOX", NULL,
             WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
             210, 320, 150, 100,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_DeflautPermission,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         SendMessage(hPermission, CB_ADDSTRING, 0, (LPARAM)L"不修改");
@@ -136,7 +136,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"EDIT", L"不修改",
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_MULTILINE,
             220, 450, 300, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, H_ CONF_LevelName,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hLabel_6 = CreateWindow(
@@ -150,7 +150,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"EDIT", L"不修改",
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_MULTILINE,
             220, 510, 300, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_LevelSeed,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hLabel_7 = CreateWindow(
@@ -164,7 +164,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"EDIT", L"不修改",
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_MULTILINE | ES_NUMBER,
             220, 570, 70, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_MaxPlayer,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
 
@@ -173,42 +173,42 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"BUTTON", L"在线模式",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             20, 650, 100, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_OnlineMod,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hLAN = CreateWindow(
             L"BUTTON", L"局域网可见",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             170, 650, 130, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_LanVisible,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
-        HWND hWiteList = CreateWindow(
+        HWND hWhiteList = CreateWindow(
             L"BUTTON", L"打开原生白名单",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             320, 650, 200, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_Whitelist,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hOnlineMode_1 = CreateWindow(
             L"BUTTON", L"不修改上项",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             20, 700, 130, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_OnlineMod_NOEDIT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hLAN_1 = CreateWindow(
             L"BUTTON", L"不修改上项",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             170, 700, 130, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_LanVisible_NOEDIT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hWiteList_1 = CreateWindow(
             L"BUTTON", L"不修改上项",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             320, 700, 130, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_Whitelist_NOEDIT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         SendMessage(hOnlineMode_1, BM_SETCHECK, BST_CHECKED, 0);
@@ -226,42 +226,42 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"BUTTON", L"强制材质包",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             20, 820, 130, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_FroceTexture,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hDIYskin = CreateWindow(
             L"BUTTON", L"禁用自定义皮肤",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             165, 820, 180, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_BanSkin,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hMute = CreateWindow(
             L"BUTTON", L"全员禁言",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             360, 820, 100, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_Mute,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hFroceTexture_1 = CreateWindow(
             L"BUTTON", L"不修改上项",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             20, 870, 130, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_FroceTexture_NOEDIT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hDIYskin_1 = CreateWindow(
             L"BUTTON", L"不修改上项",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             165, 870, 130, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_BanSkin_NOEDIT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hMute_1 = CreateWindow(
             L"BUTTON", L"不修改上项",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             360, 870, 130, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_Mute_NOEDIT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         SendMessage(hDIYskin_1, BM_SETCHECK, BST_CHECKED, 0);
@@ -279,28 +279,28 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"BUTTON", L"不修改",
             WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON | WS_GROUP,
             40, 980, 90, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_AntiCheat_NOEDIT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hCompare_2 = CreateWindow(
             L"BUTTON", L"关闭",
             WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON,
             150, 980, 80, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_AntiCheat_OFF,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hCompare_3 = CreateWindow(
             L"BUTTON", L"启用",
             WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON,
             250, 980, 80, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_AntiCheat_ON,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hCompare_4 = CreateWindow(
             L"BUTTON", L"最严格",
             WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON,
             350, 980, 80, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_AntiCheat_STRICT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         SendMessage(hCompare_1, BM_SETCHECK, BST_CHECKED, 0);
@@ -310,14 +310,14 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"BUTTON", L"打开配置文件",
             WS_VISIBLE | WS_CHILD ,
             240, 1070, 160, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_OPENCONFIG,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hConfigOK = CreateWindow(
             L"BUTTON", L"提交",
             WS_VISIBLE | WS_CHILD ,
             410, 1070, 110, 40,
-            hWnd1, (HMENU)NULL,
+            hWnd1, (HMENU)CONF_OK,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
 
