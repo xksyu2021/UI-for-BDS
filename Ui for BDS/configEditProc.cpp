@@ -1,7 +1,9 @@
 #include "Win32.h"
 #include "Function.h"
 #include "SharedValue.h"
-#include "ConfigID.h"
+#include "Config.h"
+
+#include <vector>
 
 HFONT Font();
 
@@ -323,6 +325,22 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
 
         break;
     }
+
+    case WM_COMMAND:
+    {
+        WORD wmId = LOWORD(wParam);
+        switch (wmId)
+        {
+        case CONF_OK:
+            Submit(hWnd1);
+            DestroyWindow(hWnd1);
+            break;
+        default:
+            break;
+        }
+        break;
+    }
+
     case WM_CLOSE:
     {
         INT result = MessageBox(hWnd1,
@@ -330,7 +348,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             MB_YESNOCANCEL | MB_ICONWARNING);
         if (result == IDYES)
         {
-
+            Submit(hWnd1);
             DestroyWindow(hWnd1);
         }
         else if (result == IDNO)

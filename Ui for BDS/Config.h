@@ -1,5 +1,7 @@
 #pragma once
 
+void Submit(HWND hWnd1);
+
 #define CONF_ServerName 51010
 #define CONF_GameMode 51020
 #define CONF_ForeceGameMode 51021
