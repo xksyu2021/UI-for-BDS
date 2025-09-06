@@ -13,10 +13,10 @@ void Submit(HWND hWnd1);
 #define CONF_LevelSeed 51070
 #define CONF_MaxPlayer 51080
 
-#define CONF_OnlineMod 51090
+#define CONF_OnlineMode 51090
 #define CONF_LanVisible 51100
 #define CONF_Whitelist 51120
-#define CONF_OnlineMod_NOEDIT 51091
+#define CONF_OnlineMode_NOEDIT 51091
 #define CONF_LanVisible_NOEDIT 51101
 #define CONF_Whitelist_NOEDIT 51121
 
