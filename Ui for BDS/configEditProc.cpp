@@ -58,9 +58,9 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
         SendMessage(hGamemode, CB_SETCURSEL, 0, 0);
         HWND hForceGM = CreateWindow(
             L"BUTTON", L"强制游戏模式",
-            WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+            WS_CHILD | BS_AUTOCHECKBOX,
             320, 145, 150, 40,
-            hWnd1, (HMENU)CONF_ForeceGameMode,
+            hWnd1, (HMENU)CONF_ForceGameMode,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hLabel_3 = CreateWindow(
@@ -175,7 +175,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"BUTTON", L"在线模式",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             20, 650, 100, 40,
-            hWnd1, (HMENU)CONF_OnlineMod,
+            hWnd1, (HMENU)CONF_OnlineMode,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hLAN = CreateWindow(
@@ -187,7 +187,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
         );
         HWND hWhiteList = CreateWindow(
             L"BUTTON", L"打开原生白名单",
-            WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+            WS_CHILD | BS_AUTOCHECKBOX,
             320, 650, 200, 40,
             hWnd1, (HMENU)CONF_Whitelist,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
@@ -196,7 +196,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             L"BUTTON", L"不修改上项",
             WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
             20, 700, 130, 40,
-            hWnd1, (HMENU)CONF_OnlineMod_NOEDIT,
+            hWnd1, (HMENU)CONF_OnlineMode_NOEDIT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hLAN_1 = CreateWindow(
@@ -208,7 +208,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
         );
         HWND hWiteList_1 = CreateWindow(
             L"BUTTON", L"不修改上项",
-            WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+            WS_CHILD | BS_AUTOCHECKBOX,
             320, 700, 130, 40,
             hWnd1, (HMENU)CONF_Whitelist_NOEDIT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
@@ -272,37 +272,16 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
 
         HWND hCompare = CreateWindow(
             L"BUTTON", L"服务端校验",
-            WS_VISIBLE | WS_CHILD | BS_GROUPBOX,
-            20, 940, 440, 100,
-            hWnd1, NULL,
+            WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+            20, 930, 130, 40,
+            hWnd1, (HMENU)CONF_AntiCheat,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hCompare_1 = CreateWindow(
-            L"BUTTON", L"不修改",
-            WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON | WS_GROUP,
-            40, 980, 90, 40,
+            L"BUTTON", L"不修改上项",
+            WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+            20, 980, 130, 40,
             hWnd1, (HMENU)CONF_AntiCheat_NOEDIT,
-            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
-        );
-        HWND hCompare_2 = CreateWindow(
-            L"BUTTON", L"关闭",
-            WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON,
-            150, 980, 80, 40,
-            hWnd1, (HMENU)CONF_AntiCheat_OFF,
-            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
-        );
-        HWND hCompare_3 = CreateWindow(
-            L"BUTTON", L"启用",
-            WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON,
-            250, 980, 80, 40,
-            hWnd1, (HMENU)CONF_AntiCheat_ON,
-            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
-        );
-        HWND hCompare_4 = CreateWindow(
-            L"BUTTON", L"最严格",
-            WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON,
-            350, 980, 80, 40,
-            hWnd1, (HMENU)CONF_AntiCheat_STRICT,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         SendMessage(hCompare_1, BM_SETCHECK, BST_CHECKED, 0);
@@ -329,6 +308,27 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
     {
         WORD wmId = LOWORD(wParam);
+        WORD wmEvent = HIWORD(wParam);
+
+        if (wmEvent == CBN_SELCHANGE && wmId == CONF_GameMode)
+        {
+            int selected = SendMessage(GetDlgItem(hWnd1, CONF_GameMode), CB_GETCURSEL, 0, 0);
+            ShowWindow(GetDlgItem(hWnd1, CONF_ForceGameMode), SW_HIDE);
+            if (selected != 0)
+                ShowWindow(GetDlgItem(hWnd1, CONF_ForceGameMode), SW_SHOW);
+        }
+        if (wmEvent == BN_CLICKED && wmId == CONF_OnlineMode)
+        {
+            ShowWindow(GetDlgItem(hWnd1, CONF_Whitelist), SW_HIDE);
+            ShowWindow(GetDlgItem(hWnd1, CONF_Whitelist_NOEDIT), SW_HIDE);
+            if (IsDlgButtonChecked(hWnd1, CONF_OnlineMode) == BST_CHECKED)
+            {
+                ShowWindow(GetDlgItem(hWnd1, CONF_Whitelist), SW_SHOW);
+                ShowWindow(GetDlgItem(hWnd1, CONF_Whitelist_NOEDIT), SW_SHOW);
+            }
+        }
+
+
         switch (wmId)
         {
         case CONF_OK:

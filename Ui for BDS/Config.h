@@ -4,7 +4,7 @@ void Submit(HWND hWnd1);
 
 #define CONF_ServerName 51010
 #define CONF_GameMode 51020
-#define CONF_ForeceGameMode 51021
+#define CONF_ForceGameMode 51021
 #define CONF_GameDifficuty 51030
 #define CONF_Cheat 51040
 #define CONF_Cheat_NOEDIT 51041
@@ -28,9 +28,7 @@ void Submit(HWND hWnd1);
 #define CONF_Mute_NOEDIT 51151
 
 #define CONF_AntiCheat_NOEDIT 51161
-#define CONF_AntiCheat_OFF 51162
-#define CONF_AntiCheat_ON 51163
-#define CONF_AntiCheat_STRICT 51164
+#define CONF_AntiCheat 51162
 
 #define CONF_OPENCONFIG 51170
 #define CONF_OK 51180

@@ -105,17 +105,29 @@ static void ConfigSet_CheckDIY_AntiCheat(std::vector<std::string>& configText, H
 {
 	if (IsDlgButtonChecked(hWnd1, CONF_AntiCheat_NOEDIT) != BST_CHECKED)
 	{
+		std::string targetA = "server-authoritative-movement-strict", 
+			targetB = "server-authoritative-dismount-strict",
+			targetC = "server-authoritative-entity-interactions-strict";
 		for (auto& l : configText)
 		{
-			char targetA, targetB, targetC, targetD;
+			bool check = (IsDlgButtonChecked(hWnd1, CONF_AntiCheat) == BST_CHECKED);
 			if (l.find(targetA) != std::string::npos)
 			{
-				if (IsDlgButtonChecked(hWnd1, CONF_AntiCheat_OFF) == BST_CHECKED)
-					l = targetA + "=Disabled";
-				else if (IsDlgButtonChecked(hWnd1, CONF_AntiCheat_ON) == BST_CHECKED)
-					l = targetA + "=Disabled";
-				else l = targetA + "=None";
-				return;
+				if(check)
+					l = targetA + "=true";
+				else l = targetA + "=false";
+			}
+			if (l.find(targetB) != std::string::npos)
+			{
+				if (check)
+					l = targetB + "=true";
+				else l = targetB + "=false";
+			}
+			if (l.find(targetC) != std::string::npos)
+			{
+				if (check)
+					l = targetC + "=true";
+				else l = targetC + "=false";
 			}
 		}
 	}
@@ -129,7 +141,7 @@ void Submit(HWND hWnd1)
 
 	//EDIT
 	ConfigSet_EDIT(configText, hWnd1, 
-		"server-name",  CONF_ServerName);
+		"server-name", CONF_ServerName);
 
 	ConfigSet_EDIT(configText, hWnd1,
 		"level-name", CONF_LevelName);
@@ -157,8 +169,9 @@ void Submit(HWND hWnd1)
 	//CheckDIY
 	ConfigSet_CheckDIY_Mute(configText, hWnd1,
 		"chat-restriction", CONF_Mute, CONF_Mute_NOEDIT);
+	ConfigSet_CheckDIY_AntiCheat(configText, hWnd1);
 
-
+	//submit
 	ConfigWrite(configText);
 	MessageBox(hWnd,
 		L"“—≥¢ ‘Ã·Ωª", TITLE,
