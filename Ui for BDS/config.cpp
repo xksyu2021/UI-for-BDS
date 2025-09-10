@@ -133,6 +133,160 @@ static void ConfigSet_CheckDIY_AntiCheat(std::vector<std::string>& configText, H
 	}
 }
 
+static void ConfigSet_ComboDIY_Gamemode(std::vector<std::string>& configText, HWND hWnd1)
+{
+	int selected = SendMessage(hGamemode, CB_GETCURSEL, 0, 0);
+	std::string target;
+	switch (selected)
+	{
+	case 0:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+					l = target + "=";
+				return;
+			}
+		}
+		break;
+	case 1:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	case 2:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	case 3:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	}
+}
+static void ConfigSet_ComboDIY_Difficuty(std::vector<std::string>& configText, HWND hWnd1)
+{
+	int selected = SendMessage(hDifficulty, CB_GETCURSEL, 0, 0);
+	std::string target;
+	switch (selected)
+	{
+	case 0:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	case 1:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	case 2:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	case 3:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	case 4:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	}
+}
+static void ConfigSet_ComboDIY_Level(std::vector<std::string>& configText, HWND hWnd1)
+{
+	int selected = SendMessage(hPermission, CB_GETCURSEL, 0, 0);
+	std::string target;
+	switch (selected)
+	{
+	case 0:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	case 1:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	case 2:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	case 3:
+		for (auto& l : configText)
+		{
+			if (l.find(target) != std::string::npos)
+			{
+				l = target + "=";
+				return;
+			}
+		}
+		break;
+	}
+}
 
 //whole
 void Submit(HWND hWnd1)
@@ -170,6 +324,11 @@ void Submit(HWND hWnd1)
 	ConfigSet_CheckDIY_Mute(configText, hWnd1,
 		"chat-restriction", CONF_Mute, CONF_Mute_NOEDIT);
 	ConfigSet_CheckDIY_AntiCheat(configText, hWnd1);
+
+	//ComboDIY
+	ConfigSet_ComboDIY_Gamemode(configText, hWnd1);
+	ConfigSet_ComboDIY_Difficuty(configText, hWnd1);
+	ConfigSet_ComboDIY_Level(configText, hWnd1);
 
 	//submit
 	ConfigWrite(configText);

@@ -2,6 +2,8 @@
 
 void Submit(HWND hWnd1);
 
+extern HWND hGamemode, hDifficulty, hPermission;
+
 #define CONF_ServerName 51010
 #define CONF_GameMode 51020
 #define CONF_ForceGameMode 51021
