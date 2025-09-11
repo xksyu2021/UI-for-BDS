@@ -6,6 +6,8 @@
 #include <vector>
 
 HFONT Font();
+HWND hGamemode, hDifficulty, hPermission;
+WORD wmId, wmEvent;
 
 LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -15,7 +17,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
     {
         HFONT hFont = Font();
 
-         HWND hLabel_1 = CreateWindow(
+        HWND hLabel_1 = CreateWindow(
             L"STATIC", L"·þÎñÆ÷Ãû³Æ",
             WS_VISIBLE | WS_CHILD,
             20, 20, 100, 30,
@@ -44,7 +46,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             hWnd1, NULL,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
-        HWND hGamemode = CreateWindow(
+        hGamemode = CreateWindow(
             L"COMBOBOX", NULL,
             WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
             150, 150, 150, 100,
@@ -70,7 +72,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             hWnd1, NULL,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
-        HWND hDifficulty = CreateWindow(
+        hDifficulty = CreateWindow(
             L"COMBOBOX", NULL,
             WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
             150, 195, 150, 100,
@@ -107,7 +109,7 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             hWnd1, NULL,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
-        HWND hPermission = CreateWindow(
+        hPermission = CreateWindow(
             L"COMBOBOX", NULL,
             WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST,
             210, 320, 150, 100,
@@ -307,8 +309,8 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case WM_COMMAND:
     {
-        WORD wmId = LOWORD(wParam);
-        WORD wmEvent = HIWORD(wParam);
+        wmId = LOWORD(wParam);
+        wmEvent = HIWORD(wParam);
 
         if (wmEvent == CBN_SELCHANGE && wmId == CONF_GameMode)
         {
@@ -328,9 +330,14 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
             }
         }
 
+        //Update(hWnd1,);
+        Update(hWnd1, CONF_Cheat, CONF_Cheat_NOEDIT);
 
         switch (wmId)
         {
+        case CONF_OPENCONFIG:
+            ShellExecute(NULL, L"open", L"server.properties", NULL, NULL, SW_SHOW);
+            break;
         case CONF_OK:
             Submit(hWnd1);
             DestroyWindow(hWnd1);

@@ -5,6 +5,11 @@
 
 #include <vector>
 
+void Update(HWND hWnd1, int id, int id1 )
+{
+	if (wmEvent == BN_CLICKED && wmId == id)
+		SendMessage(GetDlgItem(hWnd1,id1), BM_SETCHECK, BST_UNCHECKED, 0);
+}
 
 //basic
 static std::vector<std::string> ConfigRead()
@@ -136,25 +141,15 @@ static void ConfigSet_CheckDIY_AntiCheat(std::vector<std::string>& configText, H
 static void ConfigSet_ComboDIY_Gamemode(std::vector<std::string>& configText, HWND hWnd1)
 {
 	int selected = SendMessage(hGamemode, CB_GETCURSEL, 0, 0);
-	std::string target;
+	std::string target = "gamemode";
 	switch (selected)
 	{
-	case 0:
-		for (auto& l : configText)
-		{
-			if (l.find(target) != std::string::npos)
-			{
-					l = target + "=";
-				return;
-			}
-		}
-		break;
 	case 1:
 		for (auto& l : configText)
 		{
 			if (l.find(target) != std::string::npos)
 			{
-				l = target + "=";
+				l = target + "=adventure";
 				return;
 			}
 		}
@@ -164,7 +159,7 @@ static void ConfigSet_ComboDIY_Gamemode(std::vector<std::string>& configText, HW
 		{
 			if (l.find(target) != std::string::npos)
 			{
-				l = target + "=";
+				l = target + "=survival";
 				return;
 			}
 		}
@@ -174,7 +169,7 @@ static void ConfigSet_ComboDIY_Gamemode(std::vector<std::string>& configText, HW
 		{
 			if (l.find(target) != std::string::npos)
 			{
-				l = target + "=";
+				l = target + "=creative";
 				return;
 			}
 		}
@@ -184,25 +179,15 @@ static void ConfigSet_ComboDIY_Gamemode(std::vector<std::string>& configText, HW
 static void ConfigSet_ComboDIY_Difficuty(std::vector<std::string>& configText, HWND hWnd1)
 {
 	int selected = SendMessage(hDifficulty, CB_GETCURSEL, 0, 0);
-	std::string target;
+	std::string target = "difficulty";
 	switch (selected)
 	{
-	case 0:
-		for (auto& l : configText)
-		{
-			if (l.find(target) != std::string::npos)
-			{
-				l = target + "=";
-				return;
-			}
-		}
-		break;
 	case 1:
 		for (auto& l : configText)
 		{
 			if (l.find(target) != std::string::npos)
 			{
-				l = target + "=";
+				l = target + "=peaceful";
 				return;
 			}
 		}
@@ -212,7 +197,7 @@ static void ConfigSet_ComboDIY_Difficuty(std::vector<std::string>& configText, H
 		{
 			if (l.find(target) != std::string::npos)
 			{
-				l = target + "=";
+				l = target + "=easy";
 				return;
 			}
 		}
@@ -222,7 +207,7 @@ static void ConfigSet_ComboDIY_Difficuty(std::vector<std::string>& configText, H
 		{
 			if (l.find(target) != std::string::npos)
 			{
-				l = target + "=";
+				l = target + "=normal";
 				return;
 			}
 		}
@@ -232,7 +217,7 @@ static void ConfigSet_ComboDIY_Difficuty(std::vector<std::string>& configText, H
 		{
 			if (l.find(target) != std::string::npos)
 			{
-				l = target + "=";
+				l = target + "=hard";
 				return;
 			}
 		}
@@ -242,25 +227,15 @@ static void ConfigSet_ComboDIY_Difficuty(std::vector<std::string>& configText, H
 static void ConfigSet_ComboDIY_Level(std::vector<std::string>& configText, HWND hWnd1)
 {
 	int selected = SendMessage(hPermission, CB_GETCURSEL, 0, 0);
-	std::string target;
+	std::string target = "default-player-permission-level";
 	switch (selected)
 	{
-	case 0:
-		for (auto& l : configText)
-		{
-			if (l.find(target) != std::string::npos)
-			{
-				l = target + "=";
-				return;
-			}
-		}
-		break;
 	case 1:
 		for (auto& l : configText)
 		{
 			if (l.find(target) != std::string::npos)
 			{
-				l = target + "=";
+				l = target + "=visitor";
 				return;
 			}
 		}
@@ -270,7 +245,7 @@ static void ConfigSet_ComboDIY_Level(std::vector<std::string>& configText, HWND 
 		{
 			if (l.find(target) != std::string::npos)
 			{
-				l = target + "=";
+				l = target + "=member";
 				return;
 			}
 		}
@@ -280,7 +255,7 @@ static void ConfigSet_ComboDIY_Level(std::vector<std::string>& configText, HWND 
 		{
 			if (l.find(target) != std::string::npos)
 			{
-				l = target + "=";
+				l = target + "=operator";
 				return;
 			}
 		}

@@ -1,8 +1,10 @@
 #pragma once
 
 void Submit(HWND hWnd1);
+void Update(HWND hWnd1, int id, int id1);
 
 extern HWND hGamemode, hDifficulty, hPermission;
+extern WORD wmId, wmEvent;
 
 #define CONF_ServerName 51010
 #define CONF_GameMode 51020
