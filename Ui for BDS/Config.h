@@ -16,6 +16,7 @@ extern WORD wmId, wmEvent;
 #define CONF_LevelName 51060
 #define CONF_LevelSeed 51070
 #define CONF_MaxPlayer 51080
+#define CONF_Idle 51190
 
 #define CONF_OnlineMode 51090
 #define CONF_LanVisible 51100

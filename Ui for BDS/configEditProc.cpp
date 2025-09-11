@@ -160,15 +160,29 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
         HWND hLabel_7 = CreateWindow(
             L"STATIC", L"最大玩家数量",
             WS_VISIBLE | WS_CHILD,
-            20, 570, 170, 30,
+            20, 570, 130, 30,
             hWnd1, NULL,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
         HWND hMaxPlayer = CreateWindow(
             L"EDIT", L"不修改",
             WS_VISIBLE | WS_CHILD | WS_BORDER | ES_MULTILINE | ES_NUMBER,
-            220, 570, 70, 40,
+            170, 570, 70, 40,
             hWnd1, (HMENU)CONF_MaxPlayer,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hLabel_8 = CreateWindow(
+            L"STATIC", L"挂机踢出时间\n填0为永不踢出",
+            WS_VISIBLE | WS_CHILD,
+            280, 570, 130, 50,
+            hWnd1, NULL,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hIdle = CreateWindow(
+            L"EDIT", L"不修改",
+            WS_VISIBLE | WS_CHILD | WS_BORDER | ES_MULTILINE | ES_NUMBER,
+            430, 570, 70, 40,
+            hWnd1, (HMENU)CONF_Idle,
             (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
         );
 
@@ -332,6 +346,13 @@ LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
 
         //Update(hWnd1,);
         Update(hWnd1, CONF_Cheat, CONF_Cheat_NOEDIT);
+        Update(hWnd1, CONF_OnlineMode, CONF_OnlineMode_NOEDIT);
+        Update(hWnd1, CONF_LanVisible, CONF_LanVisible_NOEDIT);
+        Update(hWnd1, CONF_FroceTexture, CONF_FroceTexture_NOEDIT);
+        Update(hWnd1, CONF_BanSkin, CONF_BanSkin_NOEDIT);
+        Update(hWnd1, CONF_Mute, CONF_Mute_NOEDIT);
+        Update(hWnd1, CONF_AntiCheat, CONF_AntiCheat_NOEDIT);
+        Update(hWnd1, CONF_Whitelist, CONF_Whitelist_NOEDIT);
 
         switch (wmId)
         {

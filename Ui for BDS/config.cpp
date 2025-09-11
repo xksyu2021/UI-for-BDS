@@ -43,15 +43,15 @@ static void ConfigSet_EDIT(std::vector<std::string> &configText, HWND hWnd1, std
 {
 	char newText[1024] = { 0 };
 	GetWindowTextA(GetDlgItem(hWnd1, id), newText, 1024);
-	if (newText != "不修改")
+	if (std::string(newText) != "不修改")
 	{
 		for (auto& l : configText)
 		{
 			if (l.find(target) != std::string::npos)
 			{
 				l = target + '=' + newText;
+				return;
 			}
-			return;
 		}
 	}
 }
