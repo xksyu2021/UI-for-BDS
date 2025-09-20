@@ -199,7 +199,7 @@ int WINAPI WinMain(
     HWND hFIbk = CreateWindow(
         L"BUTTON", L"备份存档",
         WS_VISIBLE | WS_CHILD,
-        210, 510, 110, 40,
+        200, 510, 110, 40,
         hWnd, (HMENU)ID_FILE_Backup,
         (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), NULL
     );

@@ -3,14 +3,14 @@
 #include "Function.h"
 #include "SharedValue.h"
 
-InitHW(hTime);   InitHW(hWeather);   InitHW(hLog);   InitHW(hPlayer); InitHW(hConfig);
+InitHW(hTime);   InitHW(hWeather);   InitHW(hLog);   InitHW(hPlayer); InitHW(hConfig); InitHW(hBackup);
 
 LRESULT CALLBACK TimeProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK WeatherProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK LogProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK PlayerProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
-
+LRESULT CALLBACK BkProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -143,9 +143,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 hConfig = CreateChildWindow(hWnd,
                     _T("配置文件编辑"),
                     570, 1200,
-                    ConfProc, _T("fc_player"), HI_FI_config);
+                    ConfProc, _T("file_conf"), HI_FI_config);
             }
             break;
+        case ID_FILE_Backup:
+            if (!hBackup)
+            {
+                HINSTANCE HI_FI_backup = NULL;
+                hBackup = CreateChildWindow(hWnd,
+                    _T("备份与恢复"),
+                    460, 400,
+                    BkProc, _T("file_backup"), HI_FI_backup);
+            }
         }
         break;
     }

@@ -498,6 +498,84 @@ LRESULT CALLBACK PlayerProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam) 
         return DefWindowProc(hWnd1, msg, wParam, lParam);
     }
     return 0;
-    return 0;
 }
 
+LRESULT CALLBACK BkProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch(msg)
+    {
+    case WM_CREATE:
+    {
+        HWND hLabel_1 = CreateWindow(
+            L"STATIC", L"备份选项",
+            WS_VISIBLE | WS_CHILD,
+            20, 20, 100, 30,
+            hWnd1, NULL,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hLevelBk = CreateWindow(
+            L"BUTTON", L"备份存档",
+            WS_VISIBLE | WS_CHILD,
+            30,70,  110, 40,
+            hWnd1, H_ ID_FILE_Bk_Level,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hAllBk = CreateWindow(
+            L"BUTTON", L"备份全部文件",
+            WS_VISIBLE | WS_CHILD,
+            150,70,  170, 40,
+            hWnd1, H_ ID_FILE_Bk_All,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hBkCover = CreateWindow(
+            L"BUTTON", L"覆盖相应先前备份",
+            WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
+            30, 125, 210, 40,
+            hWnd1, H_ ID_FILE_Bk_Cover,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hLabel_2 = CreateWindow(
+            L"STATIC", L"还原选项（应用会自动识别类型）",
+            WS_VISIBLE | WS_CHILD,
+            20, 200, 290, 30,
+            hWnd1, NULL,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        HWND hRec = CreateWindow(
+            L"BUTTON", L"选择文件",
+            WS_VISIBLE | WS_CHILD,
+            30, 245, 110, 40,
+            hWnd1, H_ ID_FILE_Bk_Open,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        break;
+    }
+
+    case WM_COMMAND:
+    {
+        WORD wmId = LOWORD(wParam);
+        switch (wmId)
+        {
+        case ID_FILE_Bk_Level:
+
+            break;
+        case ID_FILE_Bk_All:
+
+            break;
+        case ID_FILE_Bk_Open:
+
+            break;
+        }
+        break;
+    }
+
+    case WM_CLOSE:
+        DestroyWindow(hWnd1);
+        break;
+    case WM_DESTROY:
+        hBackup = NULL;
+        break;
+    default:
+        return DefWindowProc(hWnd1, msg, wParam, lParam);
+    }
+    return 0;
+}

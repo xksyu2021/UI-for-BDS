@@ -7,7 +7,7 @@
 #define C(x) (x "\n")
 
 extern HANDLE UIw_key, BDSr_key, UIr_log, BDSw_log;
-extern HWND hWnd, hLog, hTime, hWeather, hPlayer, hConfig;
+extern HWND hWnd, hLog, hTime, hWeather, hPlayer, hConfig, hBackup;
 
 #define TITLE _T("UI for BDS")
 

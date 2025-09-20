@@ -45,3 +45,8 @@
 
 #define ID_FILE_Config 5100
 #define ID_FILE_Backup 5200
+
+#define ID_FILE_Bk_Level 5201
+#define ID_FILE_Bk_All 5202
+#define ID_FILE_Bk_Cover 5203
+#define ID_FILE_Bk_Open 5204
