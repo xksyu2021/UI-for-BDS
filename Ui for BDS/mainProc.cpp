@@ -3,7 +3,7 @@
 #include "Function.h"
 #include "SharedValue.h"
 
-InitHW(hTime);   InitHW(hWeather);   InitHW(hLog);   InitHW(hPlayer); InitHW(hConfig); InitHW(hBackup);
+InitHW(hTime);   InitHW(hWeather);   InitHW(hLog);   InitHW(hPlayer); InitHW(hConfig); InitHW(hBackup); InitHW(hStart);
 
 LRESULT CALLBACK TimeProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK WeatherProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -11,7 +11,7 @@ LRESULT CALLBACK LogProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK PlayerProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ConfProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK BkProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
-
+LRESULT CALLBACK StartProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -30,6 +30,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //    MB_OK | MB_ICONWARNING);
 
         //StartBDS();
+
+        HINSTANCE HI_Start = NULL;
+        hStart = CreateStartWindow(
+            700, 450,
+            StartProc, _T("start"), HI_Start);
+        Sleep(1000);
+        DestroyWindow(hStart);
 
         HINSTANCE HI_Log = NULL;
         hLog = CreateLogWindow(

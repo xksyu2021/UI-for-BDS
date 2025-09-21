@@ -21,3 +21,4 @@ void Log(HWND hwnd);
 
 HWND CreateChildWindow(HWND hFather, LPCWCHAR childTitle, int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstance);
 HWND CreateLogWindow(LPCWCHAR childTitle, int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstanceF);
+HWND CreateStartWindow(int x, int y, WNDPROC procFunc, LPCWCHAR className, HINSTANCE hInstanceF);

@@ -137,6 +137,7 @@
     <ClInclude Include="Win32.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="backup.cpp" />
     <ClCompile Include="childProc.cpp" />
     <ClCompile Include="childProcSet.cpp" />
     <ClCompile Include="cmdSend.cpp" />

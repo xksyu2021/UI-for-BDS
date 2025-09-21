@@ -5,6 +5,31 @@
 
 HFONT Font();
 
+LRESULT CALLBACK StartProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    switch (msg)
+    {
+    case WM_CREATE:
+    {
+        HWND hLabel = CreateWindow(
+            L"STATIC", L"UI For BDS",
+            WS_VISIBLE | WS_CHILD,
+            20, 20, 130, 50,
+            hWnd1, NULL,
+            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
+        );
+        break;
+    }
+    case WM_DESTROY:
+        hStart = NULL;
+        break;
+    default:
+        return DefWindowProc(hWnd1, msg, wParam, lParam);
+    }
+    return 0;
+}
+
+
 LRESULT CALLBACK WeatherProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
     case WM_CREATE:
@@ -579,3 +604,4 @@ LRESULT CALLBACK BkProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam) {
     }
     return 0;
 }
+
