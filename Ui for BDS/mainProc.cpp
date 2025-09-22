@@ -23,19 +23,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE:
     {
-        ClearLog();
-
         //MessageBox(hWnd,
         //    L"测试版程序\n数据无价，谨慎操作！", TITLE,
         //    MB_OK | MB_ICONWARNING);
-
-        //StartBDS();
 
         HINSTANCE HI_Start = NULL;
         hStart = CreateStartWindow(
             700, 450,
             StartProc, _T("start"), HI_Start);
-        Sleep(1000);
+        HWND hLabel = CreateWindow(
+            L"STATIC", L"UI For BDS\n程序正在进行初始化",
+            WS_VISIBLE | WS_CHILD,
+            260, 200, 180, 50,
+            hStart, NULL,
+            (HINSTANCE)GetWindowLongPtr(hStart, GWLP_HINSTANCE), NULL
+        );
+
+        //INIT here
+        ClearLog();
+        //StartBDS();
+        //INIT end
+
         DestroyWindow(hStart);
 
         HINSTANCE HI_Log = NULL;

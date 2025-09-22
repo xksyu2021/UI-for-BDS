@@ -9,17 +9,6 @@ LRESULT CALLBACK StartProc(HWND hWnd1, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
     {
-    case WM_CREATE:
-    {
-        HWND hLabel = CreateWindow(
-            L"STATIC", L"UI For BDS",
-            WS_VISIBLE | WS_CHILD,
-            20, 20, 130, 50,
-            hWnd1, NULL,
-            (HINSTANCE)GetWindowLongPtr(hWnd1, GWLP_HINSTANCE), NULL
-        );
-        break;
-    }
     case WM_DESTROY:
         hStart = NULL;
         break;

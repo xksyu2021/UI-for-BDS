@@ -97,7 +97,7 @@ HWND CreateStartWindow(int x, int y, WNDPROC procFunc, LPCWCHAR className, HINST
     hChild = CreateWindowEx(
         NULL,
         className, NULL,
-        WS_POPUP | WS_VISIBLE,
+        WS_POPUP | WS_VISIBLE | WS_BORDER,
         Sx, Sy,
         x, y, NULL, NULL,
         hInstanceF, NULL
